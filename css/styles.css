@@ -1,0 +1,755 @@
+/* =========================================================
+   TU AMIGO SERRANO · Estilos
+   ---------------------------------------------------------
+   Enfoque "mobile first": los estilos base son para celular
+   y con @media (min-width: ...) agregamos cambios para
+   pantallas más anchas.
+
+   Índice
+   1. Variables (colores, tipografías, medidas)
+   2. Base y reseteo
+   3. Utilidades: contenedor, secciones, botones
+   4. Header
+   5. Hero
+   6. Cómo funciona
+   7. Oficios
+   8. Por qué
+   9. Dónde estamos
+   10. Bloques Trabajadores y Comercios
+   11. Preguntas frecuentes
+   12. Footer
+   13. Botón flotante
+   14. Pantallas medianas y grandes
+   15. Movimiento reducido
+   ========================================================= */
+
+
+/* ---------- 1. Variables ---------- */
+:root {
+  /* Paleta de la marca */
+  --azul-profundo: #142A40;
+  --azul-noche: #1F3B57;
+  --azul-lago: #3E6E96;
+  --celeste-niebla: #CFE0EC;
+  --verde-loma: #8DBA6E;
+  --verde-serrano: #24543F;
+  --amarillo-sol: #F2B33D;
+  --negro-carbon: #15191D;
+  --gris-piedra: #5B6670;
+  --gris-niebla: #E9ECEE;
+  --blanco: #FFFFFF;
+
+  /* Tipografías */
+  --fuente-titulos: "Bricolage Grotesque", system-ui, sans-serif;
+  --fuente-texto: "Nunito Sans", system-ui, sans-serif;
+
+  /* Tamaños de letra con clamp(mínimo, ideal, máximo):
+     crecen con el ancho de pantalla (vw) pero nunca pasan los límites. */
+  --tam-h1: clamp(2.25rem, 1.6rem + 2.8vw, 3.25rem);    /* 36px → 52px */
+  --tam-h2: clamp(1.875rem, 1.55rem + 1.4vw, 2.5rem);   /* 30px → 40px */
+  --tam-h3: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* 19px → 22px */
+  --tam-texto: 1.0625rem;                               /* 17px */
+  --tam-chico: 0.9375rem;                               /* 15px */
+
+  /* Medidas */
+  --ancho-max: 1120px;
+  --margen-lateral: 16px;
+  --alto-header: 64px;
+
+  /* Radios: más grande cuanto más grande es la pieza */
+  --radio-bloque: 28px;
+  --radio-tarjeta: 16px;
+  --radio-pildora: 999px;
+
+  /* Color del contorno de foco (se cambia en zonas oscuras) */
+  --foco: var(--azul-lago);
+}
+
+
+/* ---------- 2. Base y reseteo ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;           /* las anclas (#seccion) se deslizan suave */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--blanco);
+  color: var(--negro-carbon);
+  font-family: var(--fuente-texto);
+  font-size: var(--tam-texto);
+  line-height: 1.6;
+}
+
+h1, h2, h3, p, ul, ol {
+  margin: 0;
+}
+
+h1, h2 {
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  letter-spacing: -0.025em;          /* levemente negativo, como pide la marca */
+  line-height: 1.08;
+  color: var(--azul-profundo);
+  text-wrap: balance;                /* reparte mejor las palabras entre líneas */
+}
+
+h1 { font-size: var(--tam-h1); }
+h2 { font-size: var(--tam-h2); margin-bottom: 1.75rem; }
+
+h3 {
+  font-size: var(--tam-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--azul-profundo);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+/* Foco visible para quien navega con teclado (Tab).
+   :focus-visible no aparece al hacer clic con el mouse. */
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Las secciones quedan un poco más abajo al saltar con un ancla,
+   para que el header fijo no tape el título. */
+[id] {
+  scroll-margin-top: calc(var(--alto-header) + 12px);
+}
+
+/* Link "Ir al contenido": escondido hasta que recibe foco */
+.saltar {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 100;
+  padding: 12px 16px;
+  background: var(--amarillo-sol);
+  color: var(--azul-profundo);
+  font-weight: 700;
+  border-radius: 8px;
+}
+.saltar:focus {
+  top: 12px;
+}
+
+
+/* ---------- 3. Utilidades ---------- */
+
+/* Contenedor centrado de 1120px como máximo */
+.contenedor {
+  width: 100%;
+  max-width: calc(var(--ancho-max) + var(--margen-lateral) * 2);
+  margin-inline: auto;
+  padding-inline: var(--margen-lateral);
+}
+
+.contenedor--angosto {
+  max-width: calc(820px + var(--margen-lateral) * 2);
+}
+
+/* Espaciado vertical de todas las secciones */
+.seccion {
+  padding-block: clamp(56px, 9vw, 96px);
+}
+
+/* Para secciones que siguen a otra del mismo color: sin espacio arriba */
+.seccion--sin-arriba {
+  padding-top: 0;
+}
+
+.seccion--gris {
+  background: var(--gris-niebla);
+}
+
+/* Botones: son <a> con aspecto de botón */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;                  /* más de 44px: fácil de tocar con el dedo */
+  padding: 10px 24px;
+  border-radius: var(--radio-pildora);
+  font-family: var(--fuente-texto);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.boton--principal {
+  background: var(--amarillo-sol);
+  color: var(--azul-profundo);
+}
+.boton--principal:hover {
+  background: #F6C462;               /* el mismo amarillo, un poco más claro */
+}
+
+.boton--secundario {
+  border: 2px solid var(--celeste-niebla);
+  color: var(--blanco);
+}
+.boton--secundario:hover {
+  background: rgba(207, 224, 236, 0.12);
+}
+
+.boton--chico {
+  min-height: 44px;
+  padding: 8px 18px;
+  font-size: 0.9375rem;
+}
+
+/* Lista horizontal separada por puntos "·" (localidades, herramientas).
+   El punto lo agrega el CSS DESPUÉS de cada elemento menos el último:
+   así, si la línea se corta, el punto queda al final y no al principio. */
+.lista-puntos {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+}
+.lista-puntos li:not(:last-child)::after {
+  content: "·";
+  margin-inline: 0.45em;
+  opacity: 0.7;
+}
+
+
+/* ---------- 4. Header ---------- */
+.cabecera {
+  position: sticky;                  /* queda pegado arriba al bajar */
+  top: 0;
+  z-index: 50;
+  background: var(--azul-noche);
+  border-bottom: 1px solid rgba(207, 224, 236, 0.12);
+  --foco: var(--amarillo-sol);
+}
+
+.cabecera__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: var(--alto-header);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--blanco);
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.marca__logo {
+  width: 26px;
+  height: auto;
+}
+
+/* En celular el menú no se muestra (ver media query más abajo) */
+.menu {
+  display: none;
+}
+
+.menu ul {
+  display: flex;
+  gap: 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  color: var(--celeste-niebla);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+.menu a:hover {
+  color: var(--blanco);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+
+/* ---------- 5. Hero ---------- */
+.hero {
+  position: relative;
+  background: var(--azul-noche);
+  color: var(--celeste-niebla);
+  padding-top: 32px;
+  /* espacio extra abajo para la silueta de las sierras */
+  padding-bottom: clamp(88px, 12vw, 150px);
+  --foco: var(--amarillo-sol);
+}
+
+.hero__grilla {
+  display: grid;
+  gap: 24px;
+}
+
+.hero__texto {
+  max-width: 34rem;
+}
+
+.hero__antetitulo {
+  margin-bottom: 14px;
+  color: var(--verde-loma);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  color: var(--blanco);
+}
+
+.hero__bajada {
+  margin-top: 18px;
+  font-size: 1.125rem;
+  max-width: 30rem;
+}
+
+.hero__botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.hero__nota {
+  margin-top: 16px;
+  font-size: var(--tam-chico);
+}
+
+/* Logo dentro del círculo azul profundo.
+   En celular va arriba del texto (order: -1) y chico. */
+.hero__sello {
+  order: -1;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--azul-profundo);
+}
+.hero__sello img {
+  width: 54%;
+  height: auto;
+  /* el dibujo de la A es un poco más alto que ancho:
+     lo bajamos apenas para que se vea centrado ópticamente */
+  transform: translate(-3%, 2%);
+}
+
+/* La silueta de las sierras ocupa todo el ancho, pegada abajo */
+.hero__sierras {
+  position: absolute;
+  left: 0;
+  bottom: -1px;                      /* -1px evita una rayita entre hero y sección */
+  width: 100%;
+  height: clamp(56px, 9vw, 120px);
+}
+.hero__loma-fondo { fill: var(--azul-profundo); }
+.hero__loma-frente { fill: var(--blanco); }
+
+
+/* ---------- 6. Cómo funciona ---------- */
+.pasos {
+  display: grid;
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  padding: 24px;
+  background: var(--gris-niebla);
+  border-radius: var(--radio-tarjeta);
+}
+
+.paso__numero {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--azul-noche);
+  color: var(--blanco);
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  font-size: 1.125rem;
+}
+
+.paso h3,
+.razon h3 {
+  margin-bottom: 8px;
+}
+
+.paso p,
+.razon p {
+  color: var(--gris-piedra);
+}
+
+
+/* ---------- 7. Oficios ---------- */
+.oficios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--radio-pildora);
+  background: var(--celeste-niebla);
+  color: var(--azul-profundo);
+  font-weight: 700;
+  font-size: var(--tam-chico);
+}
+
+/* La última etiqueta es un link: borde punteado y fondo blanco */
+.etiqueta--otro {
+  background: var(--blanco);
+  border: 2px dashed var(--azul-lago);
+  text-decoration: none;
+}
+.etiqueta--otro:hover {
+  background: var(--celeste-niebla);
+  border-style: solid;
+}
+
+
+/* ---------- 8. Por qué ---------- */
+.razones {
+  display: grid;
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.razon {
+  padding: 24px;
+  background: var(--blanco);
+  border-radius: var(--radio-tarjeta);
+}
+
+/* Gana sobre el color general de h3 porque una clase
+   tiene más especificidad que un selector de etiqueta. */
+.razon__titulo--verde {
+  color: var(--verde-serrano);
+}
+
+
+/* ---------- 9. Dónde estamos ---------- */
+.localidades {
+  color: var(--azul-noche);
+  font-weight: 700;
+  font-size: 1.1875rem;
+  line-height: 1.8;
+}
+
+.localidades__nota {
+  margin-top: 12px;
+  color: var(--gris-piedra);
+}
+
+
+/* ---------- 10. Bloques Trabajadores y Comercios ---------- */
+.bloque {
+  display: grid;
+  gap: 28px;
+  padding: 32px 22px;
+  border-radius: var(--radio-bloque);
+  color: var(--celeste-niebla);
+  --foco: var(--amarillo-sol);
+}
+
+.bloque--verde { background: var(--verde-serrano); }
+.bloque--azul { background: var(--azul-profundo); }
+
+.bloque h2 {
+  margin-bottom: 14px;
+  color: var(--blanco);
+}
+
+.bloque__texto p {
+  margin-bottom: 24px;
+  max-width: 36rem;
+}
+
+.recuadro {
+  align-self: center;
+  padding: 22px;
+  border-radius: var(--radio-tarjeta);
+  font-size: var(--tam-chico);
+}
+
+.recuadro--verde {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.recuadro--borde {
+  border: 2px solid var(--azul-lago);
+}
+
+.recuadro__titulo {
+  margin-bottom: 10px;
+  color: var(--blanco);
+  font-size: 1rem;
+}
+
+.recuadro__lista {
+  display: grid;
+  gap: 8px;
+  padding-left: 1.2em;
+}
+.recuadro__lista li::marker {
+  color: var(--verde-loma);
+}
+
+
+/* ---------- 11. Preguntas frecuentes ---------- */
+.preguntas {
+  display: grid;
+  gap: 12px;
+}
+
+.pregunta {
+  border: 1px solid var(--gris-niebla);
+  border-radius: 12px;
+  background: var(--blanco);
+}
+.pregunta[open] {
+  border-color: var(--celeste-niebla);
+}
+
+.pregunta summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 14px 56px 14px 20px;
+  color: var(--azul-profundo);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;                  /* saca el triangulito por defecto */
+}
+.pregunta summary::-webkit-details-marker {
+  display: none;                     /* lo mismo para Safari */
+}
+
+/* Signo "+" a la derecha; al abrir gira y queda como "×" */
+.pregunta summary::after {
+  content: "+";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--azul-lago);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: rotate 0.2s;
+}
+.pregunta[open] summary::after {
+  rotate: 45deg;
+}
+
+.pregunta p {
+  padding: 0 20px 18px;
+  color: var(--gris-piedra);
+}
+
+
+/* ---------- 12. Footer ---------- */
+.pie {
+  background: var(--azul-profundo);
+  color: var(--celeste-niebla);
+  font-size: var(--tam-chico);
+  /* espacio abajo para que el botón flotante no tape el texto en celular */
+  padding: 32px 0 96px;
+  --foco: var(--amarillo-sol);
+}
+
+.pie__fila {
+  display: grid;
+  gap: 16px;
+}
+
+.pie__marca {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.pie__marca img {
+  flex-shrink: 0;
+  width: 20px;
+  height: auto;
+  margin-top: 2px;
+}
+.pie__marca strong {
+  color: var(--blanco);
+}
+
+/* inline-block (y no inline-flex) para que se respete el espacio
+   entre "WhatsApp:" y el número. El padding le da 44px de alto. */
+.pie__whatsapp {
+  display: inline-block;
+  padding-block: 11px;
+  line-height: 22px;
+  color: var(--amarillo-sol);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+
+/* ---------- 13. Botón flotante ---------- */
+.flotante {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--amarillo-sol);
+  color: var(--azul-profundo);
+  /* sombra en azul (no gris) para separarlo del fondo */
+  box-shadow: 0 6px 18px rgba(20, 42, 64, 0.35);
+  --foco: var(--azul-profundo);
+
+  /* Escondido al principio. visibility: hidden además evita
+     que se pueda llegar a él con Tab mientras no se ve. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+/* Esta clase la agrega main.js cuando el hero sale de pantalla */
+.flotante--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+
+/* ---------- 14. Pantallas medianas y grandes ---------- */
+
+/* Desde 600px: tarjetas de "Por qué" en 2 columnas */
+@media (min-width: 600px) {
+  .razones {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desde 768px (tablet): aparece el menú y se va el botón flotante */
+@media (min-width: 768px) {
+  :root {
+    --margen-lateral: 32px;
+    --alto-header: 72px;
+  }
+
+  .menu {
+    display: block;
+    margin-left: auto;               /* empuja el menú hacia la derecha */
+  }
+
+  .pasos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bloque {
+    grid-template-columns: 1.15fr 1fr;
+    align-items: center;
+    gap: 40px;
+    padding: 48px 44px;
+  }
+
+  .pie {
+    padding-bottom: 32px;
+  }
+
+  .pie__fila {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .flotante {
+    display: none;
+  }
+}
+
+/* Desde 960px (escritorio): hero en dos columnas, 4 razones en fila */
+@media (min-width: 960px) {
+  .hero {
+    padding-top: 64px;
+  }
+
+  .hero__grilla {
+    grid-template-columns: 1.35fr 1fr;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .hero__sello {
+    order: 0;                        /* vuelve a la columna derecha */
+    justify-self: center;
+    width: min(100%, 300px);
+  }
+
+  .razones {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+
+/* ---------- 15. Movimiento reducido ----------
+   Si la persona configuró su sistema para "reducir movimiento",
+   sacamos el scroll suave y las transiciones. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

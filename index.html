@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ===== SEO básico ===== -->
+  <title>Tu Amigo Serrano · Trabajadores recomendados en Sierras Chicas</title>
+  <meta name="description" content="Albañiles, jardineros, pintores, plomeros y electricistas recomendados por vecinos de Sierras Chicas, Córdoba. Pedilos por WhatsApp, gratis y sin comisión.">
+  <meta name="theme-color" content="#1F3B57">
+
+  <!-- ===== Open Graph: cómo se ve el link al compartirlo por WhatsApp/Facebook =====
+       TODO: cuando la página esté publicada, reemplazar TU-DOMINIO por la
+       dirección real (ej.: https://usuario.github.io/tu-amigo-serrano).
+       Facebook y WhatsApp necesitan la URL COMPLETA de la imagen, no una ruta relativa. -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="Tu Amigo Serrano">
+  <meta property="og:title" content="Tu Amigo Serrano · Trabajadores recomendados en Sierras Chicas">
+  <meta property="og:description" content="Albañiles, jardineros, pintores, plomeros y electricistas recomendados por vecinos de Sierras Chicas, Córdoba. Pedilos por WhatsApp, gratis y sin comisión.">
+  <meta property="og:url" content="https://TU-DOMINIO/">
+  <meta property="og:image" content="https://TU-DOMINIO/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo de Tu Amigo Serrano: una A verde con forma de cerro y un sol amarillo">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ===== Ícono de la pestaña ===== -->
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <!-- ===== Tipografías (Google Fonts) =====
+       preconnect abre la conexión con los servidores de fuentes antes de pedirlas,
+       y display=swap muestra el texto enseguida con una fuente de sistema
+       mientras se descarga la definitiva (no queda la página en blanco). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- defer: los scripts se ejecutan cuando terminó de cargar el HTML, en este orden -->
+  <script src="js/config.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- Link oculto para quien navega con teclado: salta el menú y va directo al contenido -->
+  <a class="saltar" href="#contenido">Ir al contenido</a>
+
+  <!-- =====================================================
+       1. HEADER (fijo arriba)
+       ===================================================== -->
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a class="marca" href="#inicio">
+        <img class="marca__logo" src="img/logo.svg" alt="" width="26" height="30">
+        <span>Tu Amigo Serrano</span>
+      </a>
+
+      <!-- En celular este menú se oculta con CSS (queda solo el logo y "Escribinos") -->
+      <nav class="menu" aria-label="Secciones de la página">
+        <ul>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#trabajadores">Trabajadores</a></li>
+          <li><a href="#comercios">Comercios</a></li>
+        </ul>
+      </nav>
+
+      <a class="boton boton--principal boton--chico"
+         data-wa="general"
+         href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web"
+         target="_blank" rel="noopener">Escribinos</a>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <!-- =====================================================
+         2. HERO
+         ===================================================== -->
+    <section class="hero" id="inicio" aria-labelledby="titulo-principal">
+      <div class="contenedor hero__grilla">
+        <div class="hero__texto">
+          <p class="hero__antetitulo">Sierras Chicas · Córdoba</p>
+          <h1 id="titulo-principal">Albañiles, jardineros y pintores recomendados por tus vecinos</h1>
+          <p class="hero__bajada">Contanos por WhatsApp qué necesitás y te pasamos trabajadores de tu zona. Gratis y sin comisión.</p>
+
+          <div class="hero__botones">
+            <a class="boton boton--principal"
+               data-wa="vecino"
+               href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20a%20alguien%20para%20un%20trabajo"
+               target="_blank" rel="noopener">Pedir un trabajador por WhatsApp</a>
+            <a class="boton boton--secundario" href="#trabajadores">Soy trabajador</a>
+          </div>
+
+          <p class="hero__nota">Sin apps ni registros. Te responde una persona.</p>
+        </div>
+
+        <!-- Logo grande. aria-hidden porque es decorativo (el nombre ya está en el header) -->
+        <div class="hero__sello" aria-hidden="true">
+          <img src="img/logo.svg" alt="" width="170" height="200">
+        </div>
+      </div>
+
+      <!-- Silueta de las sierras en el borde de abajo: la loma blanca de adelante
+           se une con el fondo blanco de la sección siguiente. -->
+      <svg class="hero__sierras" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="hero__loma-fondo" d="M0 120 L0 70 C120 40 220 30 340 52 C430 68 520 20 640 18 C760 16 840 58 960 50 C1080 42 1160 8 1290 22 C1360 30 1410 48 1440 44 L1440 120 Z"/>
+        <path class="hero__loma-frente" d="M0 120 L0 96 C160 80 300 74 460 88 C600 100 700 70 860 72 C1020 74 1120 98 1260 92 C1340 88 1400 82 1440 84 L1440 120 Z"/>
+      </svg>
+    </section>
+
+
+    <!-- =====================================================
+         3. CÓMO FUNCIONA
+         ===================================================== -->
+    <section class="seccion" id="como-funciona" aria-labelledby="titulo-como">
+      <div class="contenedor">
+        <h2 id="titulo-como">Cómo funciona</h2>
+
+        <!-- <ol> porque son pasos en orden -->
+        <ol class="pasos">
+          <li class="paso">
+            <span class="paso__numero" aria-hidden="true">1</span>
+            <h3>Escribinos</h3>
+            <p>Contanos qué trabajo necesitás, en qué localidad y para cuándo. Si podés, mandá una foto.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__numero" aria-hidden="true">2</span>
+            <h3>Te recomendamos</h3>
+            <p>Te pasamos 2 o 3 trabajadores de tu zona con su ficha: oficio, experiencia y fotos de trabajos.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__numero" aria-hidden="true">3</span>
+            <h3>Arreglás directo</h3>
+            <p>Hablás con el trabajador y acuerdan precio y día. Después nos contás cómo te fue.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         4. OFICIOS
+         ===================================================== -->
+    <section class="seccion seccion--sin-arriba" id="oficios" aria-labelledby="titulo-oficios">
+      <div class="contenedor">
+        <h2 id="titulo-oficios">¿Qué necesitás?</h2>
+
+        <!-- Para agregar un oficio: copiar una línea <li> y cambiar el texto -->
+        <ul class="oficios">
+          <li class="etiqueta">Albañilería</li>
+          <li class="etiqueta">Jardinería y poda</li>
+          <li class="etiqueta">Pintura</li>
+          <li class="etiqueta">Plomería</li>
+          <li class="etiqueta">Electricidad</li>
+          <li class="etiqueta">Limpieza de terreno</li>
+          <li class="etiqueta">Desmalezado</li>
+          <li>
+            <a class="etiqueta etiqueta--otro"
+               data-wa="vecino"
+               href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20a%20alguien%20para%20un%20trabajo"
+               target="_blank" rel="noopener">¿Otro? Preguntanos</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         5. POR QUÉ TU AMIGO SERRANO
+         ===================================================== -->
+    <section class="seccion seccion--gris" aria-labelledby="titulo-porque">
+      <div class="contenedor">
+        <h2 id="titulo-porque">Por qué Tu Amigo Serrano</h2>
+
+        <ul class="razones">
+          <li class="razon">
+            <h3>Gratis y sin comisión</h3>
+            <p>No le cobramos nada al vecino ni al trabajador. El precio lo arreglan entre ustedes.</p>
+          </li>
+          <li class="razon">
+            <h3 class="razon__titulo--verde">Recomendados de verdad</h3>
+            <p>Antes de sumar a un trabajador hablamos con él y con un cliente que lo recomienda.</p>
+          </li>
+          <li class="razon">
+            <h3>De tu zona</h3>
+            <p>Trabajadores que viven y trabajan en las Sierras Chicas.</p>
+          </li>
+          <li class="razon">
+            <h3>Todo por WhatsApp</h3>
+            <p>Sin apps ni formularios: lo usás como cualquier chat.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         6. DÓNDE ESTAMOS
+         ===================================================== -->
+    <section class="seccion" id="donde-estamos" aria-labelledby="titulo-donde">
+      <div class="contenedor">
+        <h2 id="titulo-donde">Dónde estamos</h2>
+
+        <!-- Para sumar una localidad: copiar una línea <li> y cambiar el nombre.
+             Los puntos "·" que separan los nombres los pone el CSS solo. -->
+        <ul class="lista-puntos localidades">
+          <li>Saldán</li>
+          <li>Villa Allende</li>
+          <li>Mendiolaza</li>
+          <li>Unquillo</li>
+          <li>Río Ceballos</li>
+          <li>Salsipuedes</li>
+          <li>Agua de Oro</li>
+          <li>La Granja</li>
+          <li>Ascochinga</li>
+        </ul>
+        <p class="localidades__nota">¿Estás cerca y no ves tu localidad? Escribinos igual.</p>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         7. TRABAJADORES
+         ===================================================== -->
+    <section class="seccion seccion--sin-arriba" id="trabajadores" aria-labelledby="titulo-trabajadores">
+      <div class="contenedor">
+        <div class="bloque bloque--verde">
+          <div class="bloque__texto">
+            <h2 id="titulo-trabajadores">¿Trabajás en un oficio? Sumate gratis</h2>
+            <p>Recibí pedidos de vecinos de tu zona sin pagar comisión.</p>
+            <a class="boton boton--principal"
+               data-wa="trabajador"
+               href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web.%20Quiero%20ofrecer%20mis%20servicios"
+               target="_blank" rel="noopener">Quiero sumarme</a>
+          </div>
+
+          <div class="recuadro recuadro--verde">
+            <h3 class="recuadro__titulo">Para sumarte te pedimos:</h3>
+            <ul class="recuadro__lista">
+              <li>Tus datos, tu oficio y las localidades donde trabajás</li>
+              <li>Una foto tuya y 3 fotos de trabajos que hiciste</li>
+              <li>2 clientes que te recomienden</li>
+              <li>Matrícula, si sos gasista o electricista</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         8. COMERCIOS
+         ===================================================== -->
+    <section class="seccion seccion--sin-arriba" id="comercios" aria-labelledby="titulo-comercios">
+      <div class="contenedor">
+        <div class="bloque bloque--azul">
+          <div class="bloque__texto">
+            <h2 id="titulo-comercios">¿Tenés un comercio? Sé Punto Amigo</h2>
+            <p>Te dejamos un cartel con QR para que tus clientes encuentren trabajadores de confianza. Sin costo, y cada mes te contamos cuántos vecinos llegaron desde tu comercio.</p>
+            <a class="boton boton--principal"
+               data-wa="comercio"
+               href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web.%20Tengo%20un%20comercio%20en%20la%20zona"
+               target="_blank" rel="noopener">Quiero ser Punto Amigo</a>
+          </div>
+
+          <div class="recuadro recuadro--borde">
+            <h3 class="recuadro__titulo">También ayudamos a comercios con herramientas simples:</h3>
+            <ul class="lista-puntos">
+              <li>Control de stock</li>
+              <li>Gestión para gastronomía</li>
+              <li>Calculadora de caja diaria</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         9. PREGUNTAS FRECUENTES
+         <details> y <summary> abren y cierran solos, sin JavaScript.
+         El atributo "open" deja la primera abierta al cargar.
+         ===================================================== -->
+    <section class="seccion" id="preguntas" aria-labelledby="titulo-preguntas">
+      <div class="contenedor contenedor--angosto">
+        <h2 id="titulo-preguntas">Preguntas frecuentes</h2>
+
+        <div class="preguntas">
+          <details class="pregunta" open>
+            <summary>¿Cuánto cuesta?</summary>
+            <p>Nada. Tu Amigo Serrano es gratis para vecinos, trabajadores y comercios.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Ustedes hacen el trabajo?</summary>
+            <p>No. Te conectamos con trabajadores independientes. El precio, las condiciones y la garantía los acordás directo con ellos.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Cómo saben que son de confianza?</summary>
+            <p>Hablamos con cada trabajador, le pedimos fotos de sus trabajos y llamamos a un cliente que lo recomienda. Después de cada trabajo, los vecinos lo califican.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Cuánto tardan en responder?</summary>
+            <p>Te contesta una persona lo antes posible, en general en el día.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       10. FOOTER
+       ===================================================== -->
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <p class="pie__marca">
+        <img src="img/logo.svg" alt="" width="20" height="24">
+        <span><strong>Tu Amigo Serrano</strong> · Red de vecinos y trabajadores de Sierras Chicas, Córdoba</span>
+      </p>
+      <!-- El número (data-wa-numero) lo completa main.js desde config.js -->
+      <a class="pie__whatsapp"
+         data-wa="general"
+         href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web"
+         target="_blank" rel="noopener">WhatsApp: <span data-wa-numero>351 XXX XXXX</span></a>
+    </div>
+  </footer>
+
+
+  <!-- =====================================================
+       BOTÓN FLOTANTE (solo celular)
+       Empieza escondido; main.js lo muestra cuando el hero sale de pantalla.
+       ===================================================== -->
+  <a class="flotante"
+     data-wa="vecino"
+     href="https://wa.me/549351XXXXXXX?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20a%20alguien%20para%20un%20trabajo"
+     target="_blank" rel="noopener"
+     aria-label="Escribinos por WhatsApp">
+    <!-- Ícono de globo de chat -->
+    <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M12 3C6.9 3 3 6.6 3 11c0 2.2 1 4.2 2.6 5.6L5 21l4.3-2.2c.9.2 1.8.3 2.7.3 5.1 0 9-3.6 9-8.1S17.1 3 12 3Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/>
+    </svg>
+  </a>
+
+</body>
+</html>
