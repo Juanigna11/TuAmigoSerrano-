@@ -10,15 +10,14 @@
   Número en formato internacional, SIN "+", sin espacios ni guiones.
   Argentina = 54, celular = 9, después código de área sin 0 y número sin 15.
   Ejemplo: 351 123 4567  →  5493511234567
-  TODO: reemplazar cuando esté la línea nueva.
 */
-const NUMERO_WHATSAPP = "549351XXXXXXX";
+const NUMERO_WHATSAPP = "5493543691050";
 
 /*
   Cómo se muestra el número escrito en la página (footer).
   Es solo texto para leer: no se usa para armar los links.
 */
-const NUMERO_VISIBLE = "351 XXX XXXX";
+const NUMERO_VISIBLE = "3543 691050";
 
 /*
   Mensajes que le llegan escritos al vecino en el chat.
