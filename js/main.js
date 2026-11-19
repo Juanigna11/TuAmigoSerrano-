@@ -81,3 +81,25 @@ if (hero && botonFlotante) {
     botonFlotante.classList.add("flotante--visible");
   }
 }
+
+
+/*
+  Sierras animadas y "reducir movimiento"
+  ---------------------------------------
+  El CSS frena el corrimiento lateral, pero el cambio de forma de las lomas
+  es una animación del SVG (<animate>) y el CSS no la alcanza.
+  Si la persona pidió reducir movimiento, la pausamos desde acá.
+*/
+const sierras = document.querySelector(".hero__sierras");
+const pideMenosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function ajustarSierras() {
+  if (!sierras || !sierras.pauseAnimations) return;
+  if (pideMenosMovimiento.matches) {
+    sierras.pauseAnimations();
+  } else {
+    sierras.unpauseAnimations();
+  }
+}
+ajustarSierras();
+pideMenosMovimiento.addEventListener("change", ajustarSierras);

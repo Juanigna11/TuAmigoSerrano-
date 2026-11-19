@@ -103,8 +103,18 @@
       <!-- Silueta de las sierras en el borde de abajo: la loma blanca de adelante
            se une con el fondo blanco de la sección siguiente. -->
       <svg class="hero__sierras" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path class="hero__loma-fondo" d="M0 120 L0 70 C120 40 220 30 340 52 C430 68 520 20 640 18 C760 16 840 58 960 50 C1080 42 1160 8 1290 22 C1360 30 1410 48 1440 44 L1440 120 Z"/>
-        <path class="hero__loma-frente" d="M0 120 L0 96 C160 80 300 74 460 88 C600 100 700 70 860 72 C1020 74 1120 98 1260 92 C1340 88 1400 82 1440 84 L1440 120 Z"/>
+        <path class="hero__loma-fondo" d="M0 120 L0 70 C120 40 220 30 340 52 C430 68 520 20 640 18 C760 16 840 58 960 50 C1080 42 1160 8 1290 22 C1360 30 1410 48 1440 44 L1440 120 Z">
+          <!-- Las lomas cambian de forma despacio, como si respiraran.
+               "values" son las formas por las que pasa; keySplines las suaviza. -->
+          <animate attributeName="d" dur="11s" repeatCount="indefinite" calcMode="spline"
+                   keyTimes="0;0.33;0.66;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                   values="M0 120 L0 70 C120 40 220 30 340 52 C430 68 520 20 640 18 C760 16 840 58 960 50 C1080 42 1160 8 1290 22 C1360 30 1410 48 1440 44 L1440 120 Z;M0 120 L0 54 C120 28 220 46 340 66 C430 78 520 38 640 32 C760 26 840 42 960 62 C1080 76 1160 26 1290 12 C1360 6 1410 34 1440 54 L1440 120 Z;M0 120 L0 80 C120 60 220 18 340 34 C430 46 520 6 640 24 C760 42 840 70 960 38 C1080 14 1160 18 1290 36 C1360 46 1410 28 1440 34 L1440 120 Z;M0 120 L0 70 C120 40 220 30 340 52 C430 68 520 20 640 18 C760 16 840 58 960 50 C1080 42 1160 8 1290 22 C1360 30 1410 48 1440 44 L1440 120 Z"/>
+        </path>
+        <path class="hero__loma-frente" d="M0 120 L0 96 C160 80 300 74 460 88 C600 100 700 70 860 72 C1020 74 1120 98 1260 92 C1340 88 1400 82 1440 84 L1440 120 Z">
+          <animate attributeName="d" dur="8s" repeatCount="indefinite" calcMode="spline"
+                   keyTimes="0;0.33;0.66;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                   values="M0 120 L0 96 C160 80 300 74 460 88 C600 100 700 70 860 72 C1020 74 1120 98 1260 92 C1340 88 1400 82 1440 84 L1440 120 Z;M0 120 L0 86 C160 94 300 86 460 76 C600 66 700 92 860 88 C1020 84 1120 78 1260 98 C1340 104 1400 92 1440 92 L1440 120 Z;M0 120 L0 100 C160 72 300 92 460 96 C600 100 700 76 860 78 C1020 80 1120 94 1260 82 C1340 76 1400 86 1440 78 L1440 120 Z;M0 120 L0 96 C160 80 300 74 460 88 C600 100 700 70 860 72 C1020 74 1120 98 1260 92 C1340 88 1400 82 1440 84 L1440 120 Z"/>
+        </path>
       </svg>
     </section>
 

@@ -392,27 +392,22 @@ a {
 .hero__loma-fondo { fill: var(--azul-profundo); }
 .hero__loma-frente { fill: var(--blanco); }
 
-/* Animación de las sierras: las dos lomas se mecen despacio, cada una
-   a su ritmo y en sentido contrario (efecto de profundidad).
-   transform-box: fill-box hace que los % se midan sobre la propia loma
-   y que el origen "bottom" sea su base, así nunca se despega de abajo. */
-.hero__loma-fondo,
-.hero__loma-frente {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  animation: loma-fondo 14s ease-in-out infinite alternate;
+/* Animación de las sierras (parte 1, en CSS): las dos lomas se corren
+   de costado en sentido contrario, como si las miraras desde un auto.
+   La parte 2 está en index.html: cada loma cambia de forma (<animate>). */
+.hero__loma-fondo {
+  animation: loma-fondo 9s ease-in-out infinite alternate;
 }
 .hero__loma-frente {
-  animation-name: loma-frente;
-  animation-duration: 19s;
+  animation: loma-frente 13s ease-in-out infinite alternate;
 }
 @keyframes loma-fondo {
-  from { transform: translateX(-2.5%) scaleY(0.92); }
-  to   { transform: translateX(2.5%)  scaleY(1.08); }
+  from { transform: translateX(-50px); }
+  to   { transform: translateX(50px); }
 }
 @keyframes loma-frente {
-  from { transform: translateX(1.5%)  scaleY(1); }
-  to   { transform: translateX(-1.5%) scaleY(1.06); }
+  from { transform: translateX(30px); }
+  to   { transform: translateX(-30px); }
 }
 
 
