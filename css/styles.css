@@ -316,7 +316,7 @@ a {
   color: var(--celeste-niebla);
   padding-top: 32px;
   /* espacio extra abajo para la silueta de las sierras */
-  padding-bottom: clamp(88px, 12vw, 150px);
+  padding-bottom: clamp(150px, 20vw, 280px);
   overflow: hidden;                  /* las sierras animadas no generan scroll lateral */
   --foco: var(--amarillo-sol);
 }
@@ -380,34 +380,71 @@ a {
   transform: translate(-3%, 2%);
 }
 
-/* La silueta de las sierras ocupa todo el ancho, pegada abajo */
+/* ---------- Paisaje de las sierras (hero) ----------
+   El SVG es más ancho que la pantalla (108 %, empieza en -4 %):
+   así las capas pueden correrse de costado sin que se vea el borde. */
 .hero__sierras {
   position: absolute;
-  left: -4%;                         /* más ancho que la pantalla: así, al moverse, */
-  bottom: -1px;                      /* nunca se ve el borde. -1px evita una rayita */
+  left: -4%;
+  bottom: -1px;                      /* -1px evita una rayita con la sección de abajo */
   width: 108%;
-  max-width: none;                   /* pisa la regla general de imágenes y svg */
-  height: clamp(56px, 9vw, 120px);
+  max-width: none;                   /* pisa la regla general img, svg { max-width: 100% } */
+  height: clamp(120px, 17vw, 240px);
+  overflow: visible;                 /* que el halo del sol no se recorte */
 }
-.hero__loma-fondo { fill: var(--azul-profundo); }
-.hero__loma-frente { fill: var(--blanco); }
 
-/* Animación de las sierras (parte 1, en CSS): las dos lomas se corren
-   de costado en sentido contrario, como si las miraras desde un auto.
-   La parte 2 está en index.html: cada loma cambia de forma (<animate>). */
-.hero__loma-fondo {
-  animation: loma-fondo 9s ease-in-out infinite alternate;
+/* Colores de cada capa: de lejos (más claro y apagado) a cerca */
+.sierras__capa--1 { fill: #2D5374; }            /* azul lago mezclado con el cielo: se ve lejos */
+.sierras__capa--2 { fill: var(--azul-profundo); }
+.sierras__capa--3 { fill: var(--verde-serrano); }
+.sierras__capa--4 { fill: var(--verde-loma); }
+.sierras__capa--5 { fill: var(--blanco); }
+
+.sierras__disco { fill: var(--amarillo-sol); }
+.sierras__halo  { fill: none; stroke: var(--amarillo-sol); stroke-width: 2; opacity: 0.35; }
+.sierras__niebla ellipse { fill: var(--celeste-niebla); opacity: 0.35; }
+
+/* 1) El sol sale una sola vez, al cargar la página.
+      Después el halo "respira" despacio. */
+.sierras__sol {
+  animation: sol-sale 2.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.hero__loma-frente {
-  animation: loma-frente 13s ease-in-out infinite alternate;
+.sierras__halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: halo 6s ease-in-out 2.8s infinite alternate;
 }
-@keyframes loma-fondo {
-  from { transform: translateX(-50px); }
-  to   { transform: translateX(50px); }
+.sierras__halo--2 {
+  stroke-width: 1.5;
+  animation-delay: 4.3s;             /* el segundo anillo va a destiempo */
 }
-@keyframes loma-frente {
-  from { transform: translateX(30px); }
-  to   { transform: translateX(-30px); }
+@keyframes sol-sale {
+  from { transform: translateY(110px); }
+  to   { transform: translateY(0); }
+}
+@keyframes halo {
+  from { transform: scale(0.9); opacity: 0.45; }
+  to   { transform: scale(1.2); opacity: 0.08; }
+}
+
+/* 2) Parallax: cada capa va y vuelve de costado.
+      Las lejanas se mueven poco y lento; las cercanas, más y más rápido. */
+.sierras__capa--1 { animation: vaiven-1 26s ease-in-out infinite alternate; }
+.sierras__capa--2 { animation: vaiven-2 19s ease-in-out infinite alternate; }
+.sierras__capa--3 { animation: vaiven-3 14s ease-in-out infinite alternate; }
+.sierras__capa--4 { animation: vaiven-4 11s ease-in-out infinite alternate; }
+@keyframes vaiven-1 { from { transform: translateX(-14px); } to { transform: translateX(14px); } }
+@keyframes vaiven-2 { from { transform: translateX(26px); }  to { transform: translateX(-26px); } }
+@keyframes vaiven-3 { from { transform: translateX(-38px); } to { transform: translateX(38px); } }
+@keyframes vaiven-4 { from { transform: translateX(48px); }  to { transform: translateX(-48px); } }
+
+/* 3) La niebla cruza de izquierda a derecha y vuelve a empezar */
+.sierras__niebla {
+  animation: niebla 34s linear infinite;
+}
+@keyframes niebla {
+  from { transform: translateX(-420px); }
+  to   { transform: translateX(420px); }
 }
 
 
@@ -515,6 +552,300 @@ a {
 .localidades__nota {
   margin-top: 12px;
   color: var(--gris-piedra);
+}
+
+
+
+/* ---------- 9 bis. Mapa de la zona ----------
+   Colores del dibujo: papel celeste muy claro, relieve en verdes,
+   agua en azul lago y pueblos con el color de su tramo. */
+.mapa {
+  --papel: #EEF3F6;
+  --tramo-sur: var(--azul-lago);
+  --tramo-centro: var(--verde-serrano);
+  --tramo-norte: var(--verde-loma);
+  display: grid;
+  gap: 28px;
+  padding: 28px 20px;
+  border-radius: var(--radio-bloque);
+  background: var(--papel);
+}
+
+.mapa__bajada {
+  max-width: 30rem;
+  margin-top: -0.75rem;
+  color: var(--gris-piedra);
+}
+
+/* Lista de pueblos por tramo (sirve también sin mapa y con teclado) */
+.tramos {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+  padding: 0;
+  list-style: none;
+}
+.tramo__nombre {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+.tramo__nombre::before {               /* puntito con el color del tramo */
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-tramo);
+}
+.tramo--sur    { --color-tramo: var(--tramo-sur); }
+.tramo--centro { --color-tramo: var(--tramo-centro); }
+.tramo--norte  { --color-tramo: var(--tramo-norte); }
+
+.tramo__pueblos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.chip-pueblo {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  border-radius: var(--radio-pildora);
+  background: var(--blanco);
+  color: var(--azul-profundo);
+  font: inherit;
+  font-weight: 700;
+  font-size: var(--tam-chico);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.chip-pueblo:hover { border-color: var(--color-tramo); }
+.chip-pueblo[aria-pressed="true"] {
+  background: var(--color-tramo);
+  border-color: var(--color-tramo);
+  color: var(--blanco);
+}
+.tramo--norte .chip-pueblo[aria-pressed="true"] { color: var(--azul-profundo); }
+
+/* Ficha del pueblo elegido */
+.ficha {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: var(--radio-tarjeta);
+  background: var(--blanco);
+}
+.ficha__vacia { color: var(--gris-piedra); }
+.ficha__nombre {
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--azul-profundo);
+}
+.ficha__tramo {
+  margin: 4px 0 16px;
+  color: var(--gris-piedra);
+}
+
+/* El dibujo */
+.mapa__figura { margin: 0; }
+.mapa__svg {
+  width: 100%;
+  height: auto;
+  max-height: 82vh;
+  border-radius: var(--radio-tarjeta);
+}
+.mapa__nota {
+  margin-top: 8px;
+  color: var(--gris-piedra);
+  font-size: 0.8125rem;
+}
+.mapa__fondo { fill: var(--papel); }
+/* La falda de las sierras se funde con el papel hacia el oeste */
+.mapa__piedemonte { fill: url(#falda); }
+.mapa__curvas path {
+  fill: none;
+  stroke: var(--verde-serrano);
+  stroke-width: 1;
+  opacity: 0.35;
+}
+.mapa__lago { fill: var(--azul-lago); }
+.mapa__rio {
+  fill: none;
+  stroke: var(--azul-lago);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.mapa__rio--fino { stroke-width: 2; opacity: 0.7; }
+.mapa__brillos path {
+  stroke: var(--blanco);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: brillo 3.2s ease-in-out var(--d, 0s) infinite;
+}
+@keyframes brillo {
+  0%, 100% { opacity: 0; transform: translateX(-4px); }
+  50%      { opacity: 0.85; transform: translateX(4px); }
+}
+
+/* Camino: un borde blanco ancho y la línea punteada encima */
+.mapa__camino-borde {
+  fill: none;
+  stroke: var(--blanco);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+.mapa__camino {
+  fill: none;
+  stroke: var(--azul-profundo);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.012 0.008;     /* con pathLength="1": rayitas en proporción al largo */
+}
+
+.mapa__referencias text,
+.mapa__norte text,
+.pueblo text {
+  font-family: var(--fuente-texto);
+  paint-order: stroke;               /* el borde blanco va DEBAJO de la letra */
+  stroke: var(--papel);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.mapa__referencias text {
+  fill: var(--azul-lago);
+  font-size: 15px;
+  font-weight: 700;
+  font-style: italic;
+}
+.mapa__referencias .mapa__cerro { fill: var(--blanco); stroke: var(--verde-serrano); font-size: 14px; }
+.mapa__referencias .mapa__zona {
+  fill: var(--verde-serrano);
+  stroke: none;
+  font-family: var(--fuente-titulos);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+}
+.mapa__ciudad { fill: var(--azul-profundo); }
+
+.mapa__norte circle { fill: var(--blanco); stroke: var(--celeste-niebla); stroke-width: 2; }
+.mapa__norte path { fill: var(--azul-profundo); }
+.mapa__norte text { fill: var(--azul-profundo); font-weight: 800; font-size: 15px; }
+
+/* Pueblos */
+.pueblo { cursor: pointer; outline: none; }
+.pueblo--sur    { --color-tramo: var(--tramo-sur); }
+.pueblo--centro { --color-tramo: var(--tramo-centro); }
+.pueblo--norte  { --color-tramo: var(--tramo-norte); }
+.pueblo__punto {
+  fill: var(--color-tramo);
+  stroke: var(--blanco);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.2s;
+}
+.pueblo--norte .pueblo__punto { stroke: var(--verde-serrano); stroke-width: 2.5; }
+.pueblo__onda {
+  fill: none;
+  stroke: var(--color-tramo);
+  stroke-width: 2;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pueblo text {
+  fill: var(--azul-profundo);
+  font-size: 17px;
+  font-weight: 700;
+}
+.pueblo:hover .pueblo__punto,
+.pueblo:focus-visible .pueblo__punto { transform: scale(1.3); }
+.pueblo:focus-visible text { text-decoration: underline; }
+.pueblo--elegido .pueblo__punto { transform: scale(1.45); }
+.pueblo--elegido text { font-size: 19px; }
+.pueblo--elegido .pueblo__onda { animation: onda 1.8s ease-out infinite; }
+@keyframes onda {
+  from { opacity: 0.9; transform: scale(1); }
+  to   { opacity: 0;   transform: scale(3); }
+}
+
+/* Detalles vivos: nubes que cruzan y su sombra en el suelo */
+.nube__cuerpo { fill: var(--blanco); opacity: 0.92; }
+.nube__sombra { fill: var(--azul-profundo); opacity: 0.07; }
+.nube--1 { animation: nube 70s linear infinite; }
+.nube--2 { animation: nube 95s linear -40s infinite; }
+@keyframes nube {
+  from { transform: translate(-260px, 60px); }
+  to   { transform: translate(560px, -120px); }
+}
+.ave__alas {
+  fill: none;
+  stroke: var(--azul-profundo);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+/* Entrada: cuando el mapa aparece en pantalla (clase que agrega mapa.js)
+   se dibujan las curvas de nivel, después el camino y después los pueblos. */
+.mapa--animado .mapa__curvas path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.mapa--animado .mapa__camino { opacity: 0; }
+.mapa--animado .pueblo { opacity: 0; }
+
+.mapa--en-vista .mapa__curvas path {
+  animation: dibujar 2.4s ease-out calc(var(--i) * 0.15s) forwards;
+}
+.mapa--en-vista .mapa__camino {
+  animation: aparecer 0.6s ease-out 1.4s forwards;
+}
+.mapa--en-vista .pueblo {
+  animation: aparecer 0.45s ease-out calc(1.8s + var(--i) * 0.12s) forwards;
+}
+@keyframes dibujar { to { stroke-dashoffset: 0; } }
+@keyframes aparecer { to { opacity: 1; } }
+
+/* En celular: título → mapa → lista de pueblos → ficha.
+   display: contents hace que los hijos de .mapa__texto se ordenen
+   como si fueran hijos directos de .mapa. */
+@media (max-width: 899px) {
+  .mapa__texto { display: contents; }
+  .mapa__texto h2      { order: 1; margin-bottom: 0; }
+  .mapa__bajada        { order: 2; margin-top: -12px; }
+  .mapa__figura        { order: 3; }
+  .tramos              { order: 4; margin-top: 0; }
+  .ficha               { order: 5; margin-top: 0; }
+  .mapa { gap: 20px; }
+}
+/* En pantallas chicas las letras del dibujo se agrandan para seguir leyéndose */
+@media (max-width: 599px) {
+  .pueblo text { font-size: 23px; }
+  .pueblo--elegido text { font-size: 25px; }
+  .mapa__referencias text { font-size: 19px; }
+}
+
+@media (min-width: 900px) {
+  .mapa {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 48px;
+    padding: 48px;
+  }
+  .mapa__texto {
+    position: sticky;                /* el texto acompaña mientras bajás por el mapa */
+    top: calc(var(--alto-header) + 24px);
+  }
 }
 
 
@@ -783,9 +1114,12 @@ a {
   *::after {
     transition: none !important;
   }
-  /* las sierras quedan quietas */
-  .hero__loma-fondo,
-  .hero__loma-frente {
-    animation: none;
+  /* el paisaje y el mapa quedan quietos, con todo ya a la vista */
+  .hero__sierras *,
+  .mapa__svg * {
+    animation: none !important;
   }
+  .mapa--animado .mapa__curvas path { stroke-dashoffset: 0; }
+  .mapa--animado .mapa__camino,
+  .mapa--animado .pueblo { opacity: 1; }
 }
