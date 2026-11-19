@@ -317,6 +317,7 @@ a {
   padding-top: 32px;
   /* espacio extra abajo para la silueta de las sierras */
   padding-bottom: clamp(88px, 12vw, 150px);
+  overflow: hidden;                  /* las sierras animadas no generan scroll lateral */
   --foco: var(--amarillo-sol);
 }
 
@@ -382,13 +383,37 @@ a {
 /* La silueta de las sierras ocupa todo el ancho, pegada abajo */
 .hero__sierras {
   position: absolute;
-  left: 0;
-  bottom: -1px;                      /* -1px evita una rayita entre hero y sección */
-  width: 100%;
+  left: -4%;                         /* más ancho que la pantalla: así, al moverse, */
+  bottom: -1px;                      /* nunca se ve el borde. -1px evita una rayita */
+  width: 108%;
+  max-width: none;                   /* pisa la regla general de imágenes y svg */
   height: clamp(56px, 9vw, 120px);
 }
 .hero__loma-fondo { fill: var(--azul-profundo); }
 .hero__loma-frente { fill: var(--blanco); }
+
+/* Animación de las sierras: las dos lomas se mecen despacio, cada una
+   a su ritmo y en sentido contrario (efecto de profundidad).
+   transform-box: fill-box hace que los % se midan sobre la propia loma
+   y que el origen "bottom" sea su base, así nunca se despega de abajo. */
+.hero__loma-fondo,
+.hero__loma-frente {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: loma-fondo 14s ease-in-out infinite alternate;
+}
+.hero__loma-frente {
+  animation-name: loma-frente;
+  animation-duration: 19s;
+}
+@keyframes loma-fondo {
+  from { transform: translateX(-2.5%) scaleY(0.92); }
+  to   { transform: translateX(2.5%)  scaleY(1.08); }
+}
+@keyframes loma-frente {
+  from { transform: translateX(1.5%)  scaleY(1); }
+  to   { transform: translateX(-1.5%) scaleY(1.06); }
+}
 
 
 /* ---------- 6. Cómo funciona ---------- */
@@ -762,5 +787,10 @@ a {
   *::before,
   *::after {
     transition: none !important;
+  }
+  /* las sierras quedan quietas */
+  .hero__loma-fondo,
+  .hero__loma-frente {
+    animation: none;
   }
 }
