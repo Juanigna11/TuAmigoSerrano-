@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta: mapa real · Tu Amigo Serrano</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito+Sans:wght@400;700&display=swap">
+<style>
+  :root{--azul:#142A40;--noche:#1F3B57;--verde:#24543F;--loma:#8DBA6E;--lago:#3E6E96;--gris:#5B6670;--niebla:#E9ECEE}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Nunito Sans",system-ui,sans-serif;color:var(--azul);background:#fff}
+  .aviso{background:#FFF6DF;padding:10px 16px;font-size:14px;text-align:center}
+  .zona{max-width:1180px;margin:32px auto;padding:0 16px;display:grid;gap:20px}
+  h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(30px,4vw,40px);margin:0;letter-spacing:-.02em}
+  .bajada{color:var(--gris);margin:6px 0 0;max-width:30rem}
+  .tramo{margin-top:16px}
+  .tramo h3{font-size:15px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+  .tramo h3::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{min-height:42px;padding:8px 14px;border-radius:999px;border:2px solid var(--niebla);background:#fff;font:700 15px "Nunito Sans";color:var(--azul);cursor:pointer}
+  .chip:hover{border-color:var(--c)}
+  .chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+  .sur{--c:var(--lago)} .centro{--c:var(--verde)} .norte{--c:#6E9F55}
+  .marco{position:relative;border-radius:20px;overflow:hidden;border:1px solid #D5DCE1}
+  #mapa{height:min(78vh,720px)}
+  .capas{position:absolute;top:12px;left:12px;z-index:500;display:flex;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.25);overflow:hidden}
+  .capas button{border:0;background:#fff;padding:8px 14px;font:700 14px "Nunito Sans";color:var(--azul);cursor:pointer}
+  .capas button[aria-pressed="true"]{background:var(--azul);color:#fff}
+  .pop strong{font-family:"Bricolage Grotesque";font-size:18px;display:block}
+  .pop span{color:var(--gris);font-size:13px}
+  .pop a{display:inline-block;margin-top:10px;padding:9px 14px;border-radius:999px;background:var(--verde);color:#fff!important;font-weight:700;text-decoration:none}
+  @media (min-width:900px){.zona{grid-template-columns:340px 1fr;align-items:start}}
+</style>
+</head>
+<body>
+<p class="aviso">Propuesta para revisar. Esta página no está enlazada desde la landing.</p>
+<section class="zona" aria-labelledby="t">
+  <div>
+    <h2 id="t">Recorré la zona</h2>
+    <p class="bajada">Once pueblos al pie de las Sierras Chicas. Elegí el tuyo y pedí un trabajador ahí.</p>
+    <div id="lista"></div>
+  </div>
+  <div class="marco">
+    <div class="capas" role="group" aria-label="Tipo de mapa">
+      <button type="button" data-capa="mapa" aria-pressed="true">Mapa</button>
+      <button type="button" data-capa="satelite" aria-pressed="false">Satélite</button>
+    </div>
+    <div id="mapa" role="region" aria-label="Mapa de Sierras Chicas"></div>
+  </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const NUMERO = "5493543691050";
+const TRAMOS = { Sur: "#3E6E96", Centro: "#24543F", Norte: "#6E9F55" };
+// Centro aproximado de cada pueblo: se marca con un círculo de ~1 km
+const PUEBLOS = [
+  ["Ascochinga","Norte",-30.958,-64.275],["La Granja","Norte",-31.008,-64.263],["Agua de Oro","Norte",-31.065,-64.300],
+  ["El Manzano","Norte",-31.083,-64.299],["Salsipuedes","Norte",-31.137,-64.296],
+  ["Río Ceballos","Centro",-31.165,-64.322],["Unquillo","Centro",-31.230,-64.316],
+  ["Mendiolaza","Sur",-31.265,-64.302],["Villa Allende","Sur",-31.295,-64.295],["Saldán","Sur",-31.303,-64.315],["La Calera","Sur",-31.343,-64.336]
+];
+const mapa = L.map("mapa", { scrollWheelZoom: false, zoomControl: true });
+const capas = {
+  mapa: L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        { attribution: "© OpenStreetMap © CARTO", subdomains: "abcd", maxZoom: 19 }),
+  satelite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { attribution: "Imágenes © Esri", maxZoom: 18 })
+};
+capas.mapa.addTo(mapa);
+document.querySelectorAll(".capas button").forEach(b => b.addEventListener("click", () => {
+  Object.values(capas).forEach(c => mapa.removeLayer(c));
+  capas[b.dataset.capa].addTo(mapa);
+  document.querySelectorAll(".capas button").forEach(x => x.setAttribute("aria-pressed", x === b));
+}));
+const linkWa = p => "https://wa.me/" + NUMERO + "?text=" + encodeURIComponent("Hola! Vengo de la web. Necesito a alguien para un trabajo en " + p);
+const circulos = {}, chips = {};
+PUEBLOS.forEach(([nombre, tramo, la, lo]) => {
+  const c = L.circle([la, lo], { radius: 900, color: TRAMOS[tramo], weight: 2, fillColor: TRAMOS[tramo], fillOpacity: .18 }).addTo(mapa);
+  c.bindPopup(`<div class="pop"><strong>${nombre}</strong><span>Tramo ${tramo}</span><br><a href="${linkWa(nombre)}" target="_blank" rel="noopener">Pedir un trabajador en ${nombre}</a></div>`);
+  c.on("click", () => elegir(nombre));
+  circulos[nombre] = c;
+});
+const lista = document.getElementById("lista");
+["Norte","Centro","Sur"].forEach(t => {
+  const d = document.createElement("div"); d.className = "tramo " + t.toLowerCase();
+  d.innerHTML = `<h3>Tramo ${t}</h3><div class="chips"></div>`;
+  PUEBLOS.filter(p => p[1] === t).forEach(([n]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = n; b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => { elegir(n); circulos[n].openPopup(); });
+    d.querySelector(".chips").appendChild(b); chips[n] = b;
+  });
+  lista.appendChild(d);
+});
+function elegir(n) {
+  Object.entries(chips).forEach(([k, b]) => b.setAttribute("aria-pressed", k === n));
+  Object.entries(circulos).forEach(([k, c]) => c.setStyle({ fillOpacity: k === n ? .4 : .18, weight: k === n ? 3 : 2 }));
+  mapa.flyTo(circulos[n].getLatLng(), 14, { duration: .8 });
+}
+mapa.fitBounds(PUEBLOS.map(p => [p[2], p[3]]), { padding: [40, 40] });
+</script>
+</body>
+</html>
