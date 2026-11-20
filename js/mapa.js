@@ -1,7 +1,7 @@
 /* =========================================================
    MAPA.JS · La zona (mapa real)
-   - Dibuja el mapa con Leaflet: calles de OpenStreetMap con el
-     estilo "Voyager" de CARTO, y una capa de satélite (Esri).
+   - Dibuja el mapa con Leaflet: el mapa estándar de OpenStreetMap
+     (estilo "OpenStreetMap Carto") y una capa de satélite (Esri).
    - Marca cada pueblo con un círculo del color de su tramo.
    - Al elegir un pueblo (en el mapa o en la lista) el mapa se
      acerca y muestra un botón de WhatsApp con el pueblo escrito.
@@ -52,9 +52,10 @@ if (!contenedorMapa || typeof L === "undefined") {
   });
 
   const capas = {
-    mapa: L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
+    // Mapa estándar de OpenStreetMap (su estilo se llama "OpenStreetMap Carto").
+    // Es gratis y no pide clave; solo hay que mostrar la mención a OpenStreetMap.
+    mapa: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }),
     satelite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {

@@ -513,7 +513,7 @@ a {
 
 /* ---------- 9 bis. La zona: mapa real ----------
    A la izquierda, el título y los pueblos por tramo (botones).
-   A la derecha, el mapa (Leaflet + OpenStreetMap / CARTO). */
+   A la derecha, el mapa (Leaflet + OpenStreetMap). */
 .zona {
   --color-sur: var(--azul-lago);
   --color-centro: var(--verde-serrano);
