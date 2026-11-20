@@ -82,26 +82,3 @@ if (hero && botonFlotante) {
   }
 }
 
-
-/*
-  Animaciones de los SVG y "reducir movimiento"
-  ---------------------------------------
-  El CSS frena el corrimiento lateral, pero el cambio de forma de las lomas
-  es una animación del SVG (<animate>) y el CSS no la alcanza.
-  Si la persona pidió reducir movimiento, la pausamos desde acá.
-*/
-const svgsAnimados = document.querySelectorAll(".hero__sierras, .mapa__svg");
-const pideMenosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-function ajustarSierras() {
-  svgsAnimados.forEach(function (svg) {
-    if (!svg.pauseAnimations) return;
-    if (pideMenosMovimiento.matches) {
-      svg.pauseAnimations();
-    } else {
-      svg.unpauseAnimations();
-    }
-  });
-}
-ajustarSierras();
-pideMenosMovimiento.addEventListener("change", ajustarSierras);

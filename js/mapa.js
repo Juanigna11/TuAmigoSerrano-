@@ -1,88 +1,38 @@
 /* =========================================================
-   MAPA.JS · Mapa de la zona
-   1. Animación de entrada cuando el mapa aparece en pantalla
-   2. Elegir un pueblo (en el mapa o en la lista) y mostrar su ficha
-      con un botón de WhatsApp que ya dice el pueblo
+   MAPA.JS · La zona (esquema de línea)
+   Al tocar un pueblo se "abre": se agranda, late despacio y
+   muestra su botón de WhatsApp con el pueblo ya escrito.
+   Solo puede haber uno abierto a la vez.
    ---------------------------------------------------------
-   Usa armarLinkWhatsApp() y MENSAJES_WHATSAPP de main.js/config.js.
+   Usa armarLinkWhatsApp() de main.js y MENSAJES_WHATSAPP de config.js.
    ========================================================= */
 
-const mapa = document.querySelector(".mapa");
+const botonesPueblo = document.querySelectorAll(".parada__boton");
 
-if (mapa) {
-  /* ---------- 1. Entrada ---------- */
-  // La clase "mapa--animado" esconde lo que se va a dibujar.
-  // La ponemos desde JS: si JS no carga, el mapa se ve completo igual.
-  mapa.classList.add("mapa--animado");
+function abrirPueblo(botonElegido) {
+  botonesPueblo.forEach(function (boton) {
+    const esEste = boton === botonElegido;
+    const ficha = document.getElementById(boton.getAttribute("aria-controls"));
 
-  // Vigilamos el dibujo (no toda la sección): en celular la sección es muy
-  // alta y nunca llegaría a verse un porcentaje grande de ella.
-  const dibujo = mapa.querySelector(".mapa__figura");
+    boton.setAttribute("aria-expanded", esEste ? "true" : "false");
+    ficha.hidden = !esEste;
 
-  if ("IntersectionObserver" in window && dibujo) {
-    const observador = new IntersectionObserver(function (entradas) {
-      if (entradas[0].isIntersecting) {
-        mapa.classList.add("mapa--en-vista");
-        observador.disconnect();          // la entrada pasa una sola vez
-      }
-    }, { threshold: 0.3 });
-    observador.observe(dibujo);
-  } else {
-    mapa.classList.add("mapa--en-vista");
-  }
-
-  /* ---------- 2. Elegir un pueblo ---------- */
-  const puntos = mapa.querySelectorAll(".pueblo");          // en el dibujo
-  const chips = mapa.querySelectorAll(".chip-pueblo");      // en la lista
-  const fichaVacia = mapa.querySelector(".ficha__vacia");
-  const fichaLlena = mapa.querySelector(".ficha__llena");
-  const fichaNombre = mapa.querySelector(".ficha__nombre");
-  const fichaTramo = mapa.querySelector(".ficha__tramo");
-  const fichaBoton = mapa.querySelector(".ficha__boton");
-
-  function elegir(nombre) {
-    let tramo = "";
-
-    puntos.forEach(function (punto) {
-      const esEste = punto.dataset.pueblo === nombre;
-      punto.classList.toggle("pueblo--elegido", esEste);
-      punto.setAttribute("aria-pressed", esEste ? "true" : "false");
-      if (esEste) {
-        tramo = punto.dataset.tramo;
-        // Lo pasamos al final del grupo para que quede dibujado arriba de los demás
-        punto.parentNode.appendChild(punto);
-      }
-    });
-
-    chips.forEach(function (chip) {
-      chip.setAttribute("aria-pressed", chip.dataset.pueblo === nombre ? "true" : "false");
-    });
-
-    fichaNombre.textContent = nombre;
-    fichaTramo.textContent = "Tramo " + tramo + " de Sierras Chicas";
-    fichaBoton.textContent = "Pedir un trabajador en " + nombre;
-    fichaBoton.href = armarLinkWhatsApp(MENSAJES_WHATSAPP.vecino + " en " + nombre);
-    fichaVacia.hidden = true;
-    fichaLlena.hidden = false;
-  }
-
-  puntos.forEach(function (punto) {
-    punto.addEventListener("click", function () {
-      elegir(punto.dataset.pueblo);
-    });
-    // Como es un <g> con role="button", Enter y Espacio también tienen que elegir
-    punto.addEventListener("keydown", function (evento) {
-      if (evento.key === "Enter" || evento.key === " ") {
-        evento.preventDefault();
-        elegir(punto.dataset.pueblo);
-      }
-    });
-  });
-
-  chips.forEach(function (chip) {
-    chip.setAttribute("aria-pressed", "false");
-    chip.addEventListener("click", function () {
-      elegir(chip.dataset.pueblo);
-    });
+    if (esEste) {
+      // El link se arma acá para usar el número y el mensaje de config.js
+      const enlace = ficha.querySelector("[data-pueblo-wa]");
+      const pueblo = enlace.dataset.puebloWa;
+      enlace.href = armarLinkWhatsApp(MENSAJES_WHATSAPP.vecino + " en " + pueblo);
+    }
   });
 }
+
+botonesPueblo.forEach(function (boton) {
+  boton.addEventListener("click", function () {
+    // Si ya estaba abierto, un segundo toque lo cierra
+    if (boton.getAttribute("aria-expanded") === "true") {
+      abrirPueblo(null);
+    } else {
+      abrirPueblo(boton);
+    }
+  });
+});
