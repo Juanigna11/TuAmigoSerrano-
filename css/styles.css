@@ -496,22 +496,7 @@ a {
 }
 
 
-/* ---------- 9. Dónde estamos ---------- */
-.localidades {
-  color: var(--azul-noche);
-  font-weight: 700;
-  font-size: 1.1875rem;
-  line-height: 1.8;
-}
-
-.localidades__nota {
-  margin-top: 12px;
-  color: var(--gris-piedra);
-}
-
-
-
-/* ---------- 9 bis. La zona: mapa real ----------
+/* ---------- 9. Dónde estamos: pueblos + mapa real ----------
    A la izquierda, el título y los pueblos por tramo (botones).
    A la derecha, el mapa (Leaflet + OpenStreetMap). */
 .zona {
@@ -525,6 +510,10 @@ a {
   max-width: 28rem;
   margin-top: -0.75rem;
   color: var(--gris-piedra);
+}
+.zona__texto > .zona__nota {
+  margin-top: 20px;
+  font-size: var(--tam-chico);
 }
 
 .tramos {

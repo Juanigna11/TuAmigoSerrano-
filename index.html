@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
 
-  <!-- Leaflet: la librería del mapa de "Recorré la zona" -->
+  <!-- Leaflet: la librería del mapa de "Dónde estamos" -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="css/styles.css">
 
@@ -63,7 +63,7 @@
       <nav class="menu" aria-label="Secciones de la página">
         <ul>
           <li><a href="#como-funciona">Cómo funciona</a></li>
-          <li><a href="#zona">La zona</a></li>
+          <li><a href="#zona">Dónde estamos</a></li>
           <li><a href="#trabajadores">Trabajadores</a></li>
           <li><a href="#comercios">Comercios</a></li>
         </ul>
@@ -199,45 +199,18 @@
 
 
     <!-- =====================================================
-         6. DÓNDE ESTAMOS
-         ===================================================== -->
-    <section class="seccion" id="donde-estamos" aria-labelledby="titulo-donde">
-      <div class="contenedor">
-        <h2 id="titulo-donde">Dónde estamos</h2>
-
-        <!-- Para sumar una localidad: copiar una línea <li> y cambiar el nombre.
-             Los puntos "·" que separan los nombres los pone el CSS solo. -->
-        <ul class="lista-puntos localidades">
-          <li>La Calera</li>
-          <li>Saldán</li>
-          <li>Villa Allende</li>
-          <li>Mendiolaza</li>
-          <li>Unquillo</li>
-          <li>Río Ceballos</li>
-          <li>Salsipuedes</li>
-          <li>El Manzano</li>
-          <li>Agua de Oro</li>
-          <li>La Granja</li>
-          <li>Ascochinga</li>
-        </ul>
-        <p class="localidades__nota">¿Estás cerca y no ves tu localidad? Escribinos igual.</p>
-      </div>
-    </section>
-
-
-    <!-- =====================================================
-         6 bis. LA ZONA: mapa real
+         6. DÓNDE ESTAMOS: lista de pueblos + mapa real
          Mapa estándar de OpenStreetMap (estilo "OpenStreetMap Carto"),
          dibujado con la librería Leaflet (se carga desde cdnjs, ver <head>).
          Los pueblos y la interacción están en js/mapa.js.
          La lista de pueblos funciona también sin mapa (por ejemplo, si
          la persona no tiene conexión para cargar las imágenes del mapa).
          ===================================================== -->
-    <section class="seccion seccion--sin-arriba" id="zona" aria-labelledby="titulo-zona">
+    <section class="seccion" id="zona" aria-labelledby="titulo-zona">
       <div class="contenedor">
         <div class="zona">
           <div class="zona__texto">
-            <h2 id="titulo-zona">Recorré la zona</h2>
+            <h2 id="titulo-zona">Dónde estamos</h2>
             <p>Once pueblos al pie de las Sierras Chicas. Elegí el tuyo y pedí un trabajador ahí.</p>
             <ul class="tramos">
               <li class="tramo tramo--norte">
@@ -267,6 +240,7 @@
                 </ul>
               </li>
             </ul>
+            <p class="zona__nota">¿Estás cerca y no ves tu localidad? Escribinos igual.</p>
           </div>
 
           <div class="zona__marco">
