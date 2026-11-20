@@ -511,176 +511,128 @@ a {
 
 
 
-/* ---------- 9 bis. La zona: esquema de línea ----------
-   Una grilla de 11 filas (una por pueblo) y 4 columnas:
-   [sierra] [ruta] [tramo] [línea con los pueblos]
-   Los tramos y las rutas ocupan varias filas con grid-row: inicio / fin
-   (está escrito en el HTML). La lista de pueblos usa "subgrid" para
-   compartir las mismas filas que la grilla de afuera. */
+/* ---------- 9 bis. La zona: mapa real ----------
+   A la izquierda, el título y los pueblos por tramo (botones).
+   A la derecha, el mapa (Leaflet + OpenStreetMap / CARTO). */
 .zona {
   --color-sur: var(--azul-lago);
   --color-centro: var(--verde-serrano);
-  --color-norte: var(--verde-loma);
+  --color-norte: #6E9F55;               /* verde loma un poco más oscuro: se lee sobre blanco */
   display: grid;
   gap: 24px;
-  padding: 28px 18px;
-  border-radius: var(--radio-bloque);
-  background: var(--gris-niebla);
 }
-.zona__texto p {
+.zona__texto > p {
   max-width: 28rem;
   margin-top: -0.75rem;
   color: var(--gris-piedra);
 }
 
-.linea {
+.tramos {
   display: grid;
-  grid-template-columns: 34px 22px 22px minmax(0, 1fr);
-  grid-template-rows: repeat(11, auto);
-  column-gap: 6px;
-}
-
-/* La sierra: una franja verde clara a la izquierda, con su nombre */
-.linea__sierra {
-  grid-column: 1;
-  grid-row: 1 / 12;
-  display: grid;
-  place-items: center;
-  border-radius: 999px 0 0 999px;
-  background: #DCE9D0;
-}
-.linea__sierra span,
-.linea__ruta span,
-.linea__tramo span {
-  writing-mode: vertical-rl;           /* texto parado, se lee de abajo hacia arriba */
-  transform: rotate(180deg);
-  white-space: nowrap;
-}
-.linea__sierra span {
-  font-family: var(--fuente-titulos);
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: var(--verde-serrano);
-}
-
-/* Rutas: un corchete fino con el nombre de la ruta */
-.linea__ruta {
-  grid-column: 2;
-  display: grid;
-  place-items: center;
-  margin-block: 16px;
-  border-left: 1.5px solid var(--gris-piedra);
-  border-radius: 0;
-  font-size: 0.75rem;
-  color: var(--gris-piedra);
-}
-.linea__ruta span { margin-left: 2px; }
-
-/* Nombre de cada tramo, con su color */
-.linea__tramo {
-  grid-column: 3;
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-.linea__tramo--norte  { color: #5E8F45; }        /* verde loma, más oscuro para que se lea */
-.linea__tramo--centro { color: var(--color-centro); }
-.linea__tramo--sur    { color: var(--color-sur); }
-
-/* La lista de pueblos */
-.linea__paradas {
-  grid-column: 4;
-  grid-row: 1 / 12;
-  display: grid;
-  grid-template-rows: subgrid;
-  margin: 0;
+  gap: 16px;
+  margin-top: 20px;
   padding: 0;
   list-style: none;
 }
-.parada {
-  position: relative;
-  padding: 4px 0 4px 26px;
-}
-.parada--norte  { --color-tramo: var(--color-norte); }
-.parada--centro { --color-tramo: var(--color-centro); }
-.parada--sur    { --color-tramo: var(--color-sur); }
-
-/* La línea: una franja del color del tramo detrás de cada pueblo */
-.parada::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  background: var(--color-tramo);
-}
-.parada:first-child::before { top: 24px; border-radius: 3px 3px 0 0; }
-.parada:last-child::before { bottom: calc(100% - 24px); border-radius: 0 0 3px 3px; }
-
-.parada__boton {
+.tramo--sur    { --color-tramo: var(--color-sur); }
+.tramo--centro { --color-tramo: var(--color-centro); }
+.tramo--norte  { --color-tramo: var(--color-norte); }
+.tramo__nombre {
   display: flex;
   align-items: center;
-  min-height: 40px;
-  padding: 0 8px 0 0;
-  border: 0;
-  background: none;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+.tramo__nombre::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-tramo);
+}
+.tramo__pueblos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.chip-pueblo {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 2px solid var(--gris-niebla);
+  border-radius: var(--radio-pildora);
+  background: var(--blanco);
   color: var(--azul-profundo);
   font: inherit;
   font-weight: 700;
-  text-align: left;
+  font-size: var(--tam-chico);
   cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
 }
-.parada__punto {
-  position: absolute;
-  left: 0;
-  top: 12px;
-  width: 16px;
-  height: 16px;
-  border: 3px solid var(--azul-profundo);
-  border-radius: 50%;
-  background: var(--blanco);
-  transition: transform 0.2s;
-}
-.parada__boton:hover .parada__nombre { text-decoration: underline; text-underline-offset: 4px; }
-.parada__nota {
-  margin: -6px 0 6px;
-  font-size: 0.8125rem;
-  font-style: italic;
-  color: var(--azul-lago);
+.chip-pueblo:hover { border-color: var(--color-tramo); }
+.chip-pueblo[aria-pressed="true"] {
+  background: var(--color-tramo);
+  border-color: var(--color-tramo);
+  color: var(--blanco);
 }
 
-/* Pueblo elegido: el punto se agranda y "late" despacio.
-   Es la única animación de la sección. */
-.parada__boton[aria-expanded="true"] .parada__nombre {
+/* El mapa */
+.zona__marco {
+  position: relative;
+  border: 1px solid #D5DCE1;
+  border-radius: var(--radio-tarjeta);
+  overflow: hidden;
+}
+.zona__mapa {
+  height: min(70vh, 640px);
+  min-height: 380px;
+  background: var(--gris-niebla);        /* se ve mientras cargan las imágenes */
+}
+.zona__capas {                            /* botones Mapa / Satélite, arriba a la derecha (el zoom de Leaflet va a la izquierda) */
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 500;                           /* por encima de las capas de Leaflet */
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--blanco);
+  box-shadow: 0 1px 4px rgba(20, 42, 64, 0.3);
+}
+.zona__capas button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 0;
+  background: var(--blanco);
+  color: var(--azul-profundo);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.zona__capas button[aria-pressed="true"] {
+  background: var(--azul-profundo);
+  color: var(--blanco);
+}
+
+/* Globo que aparece al elegir un pueblo (lo arma Leaflet) */
+.globo-pueblo { font-family: var(--fuente-texto); color: var(--azul-profundo); }
+.globo-pueblo strong {
+  display: block;
   font-family: var(--fuente-titulos);
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
-.parada__boton[aria-expanded="true"] .parada__punto {
-  transform: scale(1.25);
-  border-color: var(--color-tramo);
-  background: var(--color-tramo);
-  animation: latido 2.2s ease-out infinite;
-}
-/* color-mix mezcla el color del tramo con transparente: un halo del mismo color */
-@keyframes latido {
-  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-tramo) 45%, transparent); }
-  100% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-tramo) 0%, transparent); }
-}
-.parada__ficha { padding: 4px 0 12px; }
+.globo-pueblo span { color: var(--gris-piedra); font-size: 0.8125rem; }
+.globo-pueblo .boton { margin-top: 10px; color: var(--blanco); }
 
 @media (min-width: 900px) {
   .zona {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
     align-items: start;
-    gap: 48px;
-    padding: 48px;
-  }
-  .zona__texto {
-    position: sticky;
-    top: calc(var(--alto-header) + 24px);
+    gap: 40px;
   }
 }
 
@@ -949,9 +901,5 @@ a {
   *::before,
   *::after {
     transition: none !important;
-  }
-  /* el pueblo elegido no late */
-  .parada__boton[aria-expanded="true"] .parada__punto {
-    animation: none;
   }
 }

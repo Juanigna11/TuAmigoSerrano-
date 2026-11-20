@@ -34,11 +34,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
 
+  <!-- Leaflet: la librería del mapa de "Recorré la zona" -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- defer: los scripts se ejecutan cuando terminó de cargar el HTML, en este orden -->
   <script src="js/config.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
   <script src="js/mapa.js" defer></script>
 </head>
 <body>
@@ -223,132 +226,55 @@
 
 
     <!-- =====================================================
-         6 bis. LA ZONA: esquema de línea
-         Como un mapa de subte: los 11 pueblos de norte a sur sobre
-         una línea, con un color por tramo. Está armado con CSS Grid:
-         cada pueblo ocupa una fila y los tramos y las rutas "abarcan"
-         varias filas (grid-row: inicio / fin).
-         Tocar un pueblo lo abre y muestra su botón de WhatsApp (js/mapa.js).
+         6 bis. LA ZONA: mapa real
+         Mapa de OpenStreetMap con el estilo "Voyager" de CARTO, dibujado
+         con la librería Leaflet (se carga desde cdnjs, ver <head>).
+         Los pueblos y la interacción están en js/mapa.js.
+         La lista de pueblos funciona también sin mapa (por ejemplo, si
+         la persona no tiene conexión para cargar las imágenes del mapa).
          ===================================================== -->
     <section class="seccion seccion--sin-arriba" id="zona" aria-labelledby="titulo-zona">
       <div class="contenedor">
         <div class="zona">
           <div class="zona__texto">
             <h2 id="titulo-zona">Recorré la zona</h2>
-            <p>Once pueblos al pie de las Sierras Chicas, de Ascochinga a La Calera. Tocá el tuyo para pedir un trabajador ahí.</p>
+            <p>Once pueblos al pie de las Sierras Chicas. Elegí el tuyo y pedí un trabajador ahí.</p>
+            <ul class="tramos">
+              <li class="tramo tramo--norte">
+                <h3 class="tramo__nombre">Tramo Norte</h3>
+                <ul class="tramo__pueblos">
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Ascochinga" aria-pressed="false">Ascochinga</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="La Granja" aria-pressed="false">La Granja</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Agua de Oro" aria-pressed="false">Agua de Oro</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="El Manzano" aria-pressed="false">El Manzano</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Salsipuedes" aria-pressed="false">Salsipuedes</button></li>
+                </ul>
+              </li>
+              <li class="tramo tramo--centro">
+                <h3 class="tramo__nombre">Tramo Centro</h3>
+                <ul class="tramo__pueblos">
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Río Ceballos" aria-pressed="false">Río Ceballos</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Unquillo" aria-pressed="false">Unquillo</button></li>
+                </ul>
+              </li>
+              <li class="tramo tramo--sur">
+                <h3 class="tramo__nombre">Tramo Sur</h3>
+                <ul class="tramo__pueblos">
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Mendiolaza" aria-pressed="false">Mendiolaza</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Villa Allende" aria-pressed="false">Villa Allende</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="Saldán" aria-pressed="false">Saldán</button></li>
+                  <li><button type="button" class="chip-pueblo" data-pueblo="La Calera" aria-pressed="false">La Calera</button></li>
+                </ul>
+              </li>
+            </ul>
           </div>
 
-          <div class="linea">
-            <!-- Decoración: la sierra al oeste, las rutas y los nombres de tramo -->
-            <span class="linea__sierra" aria-hidden="true"><span>Sierras Chicas</span></span>
-            <span class="linea__ruta" style="grid-row: 1 / 7" aria-hidden="true"><span>Ruta E-53</span></span>
-            <span class="linea__ruta" style="grid-row: 7 / 10" aria-hidden="true"><span>Ruta E-57</span></span>
-            <span class="linea__tramo linea__tramo--norte" style="grid-row: 1 / 6" aria-hidden="true"><span>Tramo Norte</span></span>
-            <span class="linea__tramo linea__tramo--centro" style="grid-row: 6 / 8" aria-hidden="true"><span>Tramo Centro</span></span>
-            <span class="linea__tramo linea__tramo--sur" style="grid-row: 8 / 12" aria-hidden="true"><span>Tramo Sur</span></span>
-
-            <ol class="linea__paradas" aria-label="Pueblos de norte a sur">
-            <li class="parada parada--norte" style="grid-row: 1">
-              <button type="button" class="parada__boton" data-pueblo="Ascochinga" data-tramo="Norte" aria-expanded="false" aria-controls="pueblo-1">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Ascochinga</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-1" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Ascochinga" href="#" target="_blank" rel="noopener">Pedir un trabajador en Ascochinga</a>
-              </div>
-            </li>
-            <li class="parada parada--norte" style="grid-row: 2">
-              <button type="button" class="parada__boton" data-pueblo="La Granja" data-tramo="Norte" aria-expanded="false" aria-controls="pueblo-2">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">La Granja</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-2" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="La Granja" href="#" target="_blank" rel="noopener">Pedir un trabajador en La Granja</a>
-              </div>
-            </li>
-            <li class="parada parada--norte" style="grid-row: 3">
-              <button type="button" class="parada__boton" data-pueblo="Agua de Oro" data-tramo="Norte" aria-expanded="false" aria-controls="pueblo-3">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Agua de Oro</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-3" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Agua de Oro" href="#" target="_blank" rel="noopener">Pedir un trabajador en Agua de Oro</a>
-              </div>
-            </li>
-            <li class="parada parada--norte" style="grid-row: 4">
-              <button type="button" class="parada__boton" data-pueblo="El Manzano" data-tramo="Norte" aria-expanded="false" aria-controls="pueblo-4">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">El Manzano</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-4" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="El Manzano" href="#" target="_blank" rel="noopener">Pedir un trabajador en El Manzano</a>
-              </div>
-            </li>
-            <li class="parada parada--norte" style="grid-row: 5">
-              <button type="button" class="parada__boton" data-pueblo="Salsipuedes" data-tramo="Norte" aria-expanded="false" aria-controls="pueblo-5">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Salsipuedes</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-5" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Salsipuedes" href="#" target="_blank" rel="noopener">Pedir un trabajador en Salsipuedes</a>
-              </div>
-            </li>
-            <li class="parada parada--centro" style="grid-row: 6">
-              <button type="button" class="parada__boton" data-pueblo="Río Ceballos" data-tramo="Centro" aria-expanded="false" aria-controls="pueblo-6">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Río Ceballos</span>
-              </button>
-              <p class="parada__nota">Dique La Quebrada y Camino del Cuadrado</p>
-              <div class="parada__ficha" id="pueblo-6" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Río Ceballos" href="#" target="_blank" rel="noopener">Pedir un trabajador en Río Ceballos</a>
-              </div>
-            </li>
-            <li class="parada parada--centro" style="grid-row: 7">
-              <button type="button" class="parada__boton" data-pueblo="Unquillo" data-tramo="Centro" aria-expanded="false" aria-controls="pueblo-7">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Unquillo</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-7" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Unquillo" href="#" target="_blank" rel="noopener">Pedir un trabajador en Unquillo</a>
-              </div>
-            </li>
-            <li class="parada parada--sur" style="grid-row: 8">
-              <button type="button" class="parada__boton" data-pueblo="Mendiolaza" data-tramo="Sur" aria-expanded="false" aria-controls="pueblo-8">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Mendiolaza</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-8" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Mendiolaza" href="#" target="_blank" rel="noopener">Pedir un trabajador en Mendiolaza</a>
-              </div>
-            </li>
-            <li class="parada parada--sur" style="grid-row: 9">
-              <button type="button" class="parada__boton" data-pueblo="Villa Allende" data-tramo="Sur" aria-expanded="false" aria-controls="pueblo-9">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Villa Allende</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-9" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Villa Allende" href="#" target="_blank" rel="noopener">Pedir un trabajador en Villa Allende</a>
-              </div>
-            </li>
-            <li class="parada parada--sur" style="grid-row: 10">
-              <button type="button" class="parada__boton" data-pueblo="Saldán" data-tramo="Sur" aria-expanded="false" aria-controls="pueblo-10">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">Saldán</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-10" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="Saldán" href="#" target="_blank" rel="noopener">Pedir un trabajador en Saldán</a>
-              </div>
-            </li>
-            <li class="parada parada--sur" style="grid-row: 11">
-              <button type="button" class="parada__boton" data-pueblo="La Calera" data-tramo="Sur" aria-expanded="false" aria-controls="pueblo-11">
-                <span class="parada__punto" aria-hidden="true"></span>
-                <span class="parada__nombre">La Calera</span>
-              </button>
-              <div class="parada__ficha" id="pueblo-11" hidden>
-                <a class="boton boton--principal boton--chico" data-pueblo-wa="La Calera" href="#" target="_blank" rel="noopener">Pedir un trabajador en La Calera</a>
-              </div>
-            </li>
-            </ol>
+          <div class="zona__marco">
+            <div class="zona__capas" role="group" aria-label="Tipo de mapa">
+              <button type="button" data-capa="mapa" aria-pressed="true">Mapa</button>
+              <button type="button" data-capa="satelite" aria-pressed="false">Satélite</button>
+            </div>
+            <div id="mapa-zona" class="zona__mapa" role="region" aria-label="Mapa de Sierras Chicas"></div>
           </div>
         </div>
       </div>
