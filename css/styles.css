@@ -570,6 +570,11 @@ a {
 /* El mapa */
 .zona__marco {
   position: relative;
+  /* Leaflet usa z-index altos (hasta 1000) para sus capas y botones.
+     "isolation: isolate" los encierra dentro del marco: así el mapa
+     nunca pasa por encima del header fijo (que tiene z-index 50). */
+  isolation: isolate;
+  z-index: 0;
   border: 1px solid #D5DCE1;
   border-radius: var(--radio-tarjeta);
   overflow: hidden;
