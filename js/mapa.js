@@ -63,7 +63,7 @@ if (!contenedorMapa || typeof L === "undefined") {
       maxZoom: 18,
     }),
   };
-  capas.mapa.addTo(mapa);
+  capas.satelite.addTo(mapa);        // arranca en satélite (decisión 22/11)
 
   // Botones Mapa / Satélite
   document.querySelectorAll(".zona__capas button").forEach(function (boton) {
@@ -213,20 +213,6 @@ if (!contenedorMapa || typeof L === "undefined") {
     });
   });
 
-  // Encuadre: solo la franja de las Sierras Chicas.
-  // El mapa son imágenes (mosaicos) que ya vienen con los nombres dibujados,
-  // así que no podemos borrar un nombre suelto. Lo que sí podemos es no
-  // dejar que se vea lo que está al oeste (Valle de Punilla: Cosquín,
-  // La Falda) ni más allá de la zona: "maxBounds" pone un límite para
-  // arrastrar y "minZoom" no deja alejarse tanto como para verlo.
-  const limitesZona = L.latLngBounds([-31.40, -64.40], [-30.90, -64.10]);
-  mapa.setMaxBounds(limitesZona);
-  mapa.options.maxBoundsViscosity = 1;          // el borde es firme, no elástico
-  function ajustarZoomMinimo() {
-    // getBoundsZoom(..., true): el zoom con el que la vista entra DENTRO del límite
-    mapa.setMinZoom(mapa.getBoundsZoom(limitesZona, true));
-  }
-  ajustarZoomMinimo();
+  // Encuadre inicial: que entren los 11 pueblos
   mapa.fitBounds(PUEBLOS.map(function (p) { return [p.lat, p.lng]; }), { padding: [30, 30] });
-  mapa.on("resize", ajustarZoomMinimo);
 }
