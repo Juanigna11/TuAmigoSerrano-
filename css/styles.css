@@ -441,7 +441,24 @@ a {
 .pasos--en-vista .paso:nth-child(2) { animation-delay: 0.25s; }
 .pasos--en-vista .paso:nth-child(3) { animation-delay: 0.5s; }
 @keyframes paso-aparece {
-  to { opacity: 1; transform: translateY(0); }
+  /* "none" (y no translateY(0)) para que al terminar la tarjeta no quede
+     como capa aparte y la pelotita pueda pasar por debajo de los números */
+  to { opacity: 1; transform: none; }
+}
+
+/* Pelotita que recorre los pasos (solo en pantallas anchas, ver sección 14).
+   main.js la mueve según cuánto scrolleaste dentro de la sección y
+   le pone "paso__numero--alcanzado" a cada número que ya pasó. */
+.pasos { position: relative; z-index: 0; }
+.pasos__pelotita { display: none; }
+.paso__numero {
+  position: relative;
+  z-index: 2;                        /* por encima de la pelotita */
+  transition: background-color 0.3s, transform 0.3s;
+}
+.paso__numero.paso__numero--alcanzado {   /* doble clase: gana a la regla de .paso__numero */
+  background: var(--verde-serrano);
+  transform: scale(1.12);
 }
 
 .paso__numero {
@@ -894,6 +911,19 @@ a {
 
   .pasos {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .pasos__pelotita {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--amarillo-sol);
+    pointer-events: none;
+    will-change: translate;          /* le avisa al navegador que se va a mover */
   }
 
   .bloque {

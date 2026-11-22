@@ -96,6 +96,14 @@ if (listaPasos && "IntersectionObserver" in window) {
     if (entradas[0].isIntersecting) {
       listaPasos.classList.add("pasos--en-vista");
       vigiaPasos.disconnect();
+      // Cuando termina la última tarjeta, sacamos las clases de la
+      // animación: así ninguna tarjeta queda "en su propia capa" y la
+      // pelotita pasa por debajo de los números.
+      listaPasos.addEventListener("animationend", function (evento) {
+        if (evento.target === listaPasos.querySelector(".paso:last-of-type")) {
+          listaPasos.classList.remove("pasos--animado", "pasos--en-vista");
+        }
+      });
     }
   }, { threshold: 0.35 });
   vigiaPasos.observe(listaPasos);
@@ -134,4 +142,68 @@ if (heroSierras && !pideMenosMovimiento) {
   }, { passive: true });
 
   moverSierras();
+}
+
+
+/*
+  Pelotita que recorre "Cómo funciona"
+  ------------------------------------
+  1. Calculamos "avance": 0 cuando la sección recién asoma por abajo de
+     la pantalla y 1 cuando ya la recorriste.
+  2. Con ese número ubicamos la pelotita entre el centro del número 1
+     y el del 3 (pasando por el 2).
+  3. Cada número que la pelotita ya alcanzó se pinta de verde.
+  En celular la pelotita no se muestra (el CSS la oculta), pero los
+  números se pintan igual a medida que bajás.
+*/
+const pasosLista = document.querySelector(".pasos");
+const numerosPasos = pasosLista ? pasosLista.querySelectorAll(".paso__numero") : [];
+
+if (pasosLista && numerosPasos.length && !pideMenosMovimiento) {
+  const pelotita = document.createElement("span");
+  pelotita.className = "pasos__pelotita";
+  pelotita.setAttribute("aria-hidden", "true");
+  pasosLista.appendChild(pelotita);
+
+  let pasosPendiente = false;
+
+  function moverPelotita() {
+    pasosPendiente = false;
+    const caja = pasosLista.getBoundingClientRect();
+    const altoPantalla = window.innerHeight;
+
+    // Empieza cuando la sección está al 85% de la pantalla
+    // y termina cuando su final llega a la mitad.
+    const recorrido = altoPantalla * 0.35 + caja.height;
+    const avance = Math.min(Math.max((altoPantalla * 0.85 - caja.top) / recorrido, 0), 1);
+
+    // Centro de cada número, medido desde la esquina de la lista
+    const centros = Array.from(numerosPasos).map(function (numero) {
+      const r = numero.getBoundingClientRect();
+      return { x: r.left - caja.left + r.width / 2, y: r.top - caja.top + r.height / 2 };
+    });
+
+    // ¿Entre qué dos números está y cuánto avanzó en ese tramo?
+    const tramos = centros.length - 1;
+    const posicion = avance * tramos;                 // de 0 a 2
+    const i = Math.min(Math.floor(posicion), tramos - 1);
+    const t = posicion - i;
+    const x = centros[i].x + (centros[i + 1].x - centros[i].x) * t;
+    const y = centros[i].y + (centros[i + 1].y - centros[i].y) * t;
+    pelotita.style.translate = (x - 8) + "px " + (y - 8) + "px";   // 8 = mitad de la pelotita
+
+    numerosPasos.forEach(function (numero, n) {
+      numero.classList.toggle("paso__numero--alcanzado", posicion >= n - 0.05);
+    });
+  }
+
+  function pedirCuadro() {
+    if (!pasosPendiente) {
+      pasosPendiente = true;
+      requestAnimationFrame(moverPelotita);
+    }
+  }
+  window.addEventListener("scroll", pedirCuadro, { passive: true });
+  window.addEventListener("resize", pedirCuadro);
+  moverPelotita();
 }
