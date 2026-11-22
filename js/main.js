@@ -111,6 +111,31 @@ if (listaPasos && "IntersectionObserver" in window) {
 
 
 /*
+  Cinta de oficios
+  ----------------
+  1. A cada botón le armamos el link de WhatsApp con su pedido
+     ("Hola! Vengo de la web. Necesito un electricista") usando el número
+     de config.js, igual que los otros botones.
+  2. Copiamos la lista una vez más al final de la pista: así la cinta
+     no tiene fin. La copia queda oculta para el lector de pantalla
+     (aria-hidden) y fuera del recorrido con Tab (tabindex -1), para
+     no repetir los oficios dos veces.
+  Con "reducir movimiento" no se copia: la cinta queda quieta.
+*/
+document.querySelectorAll(".cinta__oficio").forEach(function (enlace) {
+  enlace.href = armarLinkWhatsApp("Hola! Vengo de la web. Necesito " + enlace.dataset.pedido);
+});
+
+const listaCinta = document.querySelector(".cinta__lista");
+if (listaCinta && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const copia = listaCinta.cloneNode(true);
+  copia.setAttribute("aria-hidden", "true");
+  copia.querySelectorAll("a").forEach(function (enlace) { enlace.tabIndex = -1; });
+  listaCinta.parentElement.appendChild(copia);
+}
+
+
+/*
   Sierras que se ondulan al scrollear
   -----------------------------------
   Cada loma es una suma de dos ondas (senos). Al scrollear, cambiamos

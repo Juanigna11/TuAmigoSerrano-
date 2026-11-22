@@ -316,7 +316,7 @@ a {
   color: var(--celeste-niebla);
   padding-top: 32px;
   /* espacio extra abajo para la silueta de las sierras */
-  padding-bottom: clamp(100px, 13vw, 190px);
+  padding-bottom: clamp(170px, 19vw, 250px);   /* lugar para la cinta de oficios y las sierras */
   --foco: var(--amarillo-sol);
   overflow-x: clip;                  /* las lomas son más anchas que la pantalla para poder moverse */
 }
@@ -475,6 +475,63 @@ a {
   from { opacity: 0; }
 }
 
+/* ---------- Cinta de oficios del hero ----------
+   Una fila de botones que se desliza sin fin. El truco: la lista está
+   dos veces seguida (main.js la copia) y la animación corre la pista
+   justo la mitad (-50%). Cuando termina, vuelve al inicio, y como la
+   segunda mitad es igual a la primera, no se nota el salto. */
+.cinta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(80px, 8.5vw, 120px);   /* apoyada justo arriba de las lomas */
+  z-index: 1;
+  overflow: hidden;
+  /* los bordes se desvanecen: la máscara es transparente en las puntas */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.cinta__pista {
+  display: flex;
+  width: max-content;
+  animation: cinta-pasa 45s linear infinite;
+}
+/* Con el mouse encima o al llegar con Tab, se frena para poder tocar */
+.cinta:hover .cinta__pista,
+.cinta:focus-within .cinta__pista {
+  animation-play-state: paused;
+}
+.cinta__lista {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 4px 12px 4px 0;            /* el 12px de la derecha = el gap, así las dos mitades miden igual */
+  list-style: none;
+}
+.cinta__oficio {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1.5px solid rgba(207, 224, 236, 0.45);
+  border-radius: var(--radio-pildora);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--celeste-niebla);
+  font-weight: 700;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.cinta__oficio:hover {
+  background: var(--verde-serrano);
+  border-color: var(--verde-loma);
+  color: var(--blanco);
+}
+@keyframes cinta-pasa {
+  to { transform: translateX(-50%); }
+}
+
 /* Foto de la zona. En celular va debajo del texto, apaisada. */
 .hero__foto {
   margin: 8px 0 0;
@@ -506,7 +563,7 @@ a {
 .hero__sol {
   position: absolute;
   left: clamp(40px, 16vw, 230px);
-  bottom: clamp(52px, 8vw, 116px);
+  bottom: clamp(36px, 5.5vw, 80px);    /* asoma entre las lomas, debajo de la cinta */
   width: clamp(24px, 2.6vw, 38px);
   height: auto;
   fill: var(--amarillo-sol);
@@ -1129,6 +1186,9 @@ a {
    Si la persona configuró su sistema para "reducir movimiento",
    sacamos el scroll suave y las transiciones. */
 @media (prefers-reduced-motion: reduce) {
+  /* la cinta no se mueve sola: se puede deslizar con el dedo o la rueda */
+  .cinta { overflow-x: auto; }
+  .cinta__pista { animation: none; }
   html {
     scroll-behavior: auto;
   }
