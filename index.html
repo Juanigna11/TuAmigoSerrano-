@@ -98,13 +98,37 @@
           <p class="hero__nota">Sin apps ni registros. Te responde una persona.</p>
         </div>
 
-        <!-- Foto de la zona (aportada por Juan). Reemplaza al logo grande,
-             que repetía el del header. -->
-        <figure class="hero__foto">
-          <img src="img/valle-sierras-chicas.webp"
-               alt="Valle verde de las Sierras Chicas, con casas entre los árboles y luz de la tarde"
-               width="900" height="840" fetchpriority="high">
-        </figure>
+        <!-- Ejemplo de cómo funciona, sobre la foto de la zona:
+             Claudia (vecina inventada) escribe al chat pidiendo un pintor
+             y le pasamos la card de Diego (trabajador real de la red).
+             Para el lector de pantalla todo el grupo es una sola imagen
+             con su descripción (role="img" + aria-label). -->
+        <div class="hero__visual" role="img"
+             aria-label="Ejemplo: Claudia escribe al chat de Tu Amigo Serrano que necesita un pintor en Salsipuedes, y le pasamos la ficha de Diego Santos, pintor recomendado de la zona.">
+          <figure class="hero__foto">
+            <img src="img/valle-sierras-chicas.webp" alt=""
+                 width="900" height="840" fetchpriority="high">
+          </figure>
+
+          <!-- Línea punteada que une el pedido con la card -->
+          <svg class="hero__conexion" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M58 24 C 40 26, 30 34, 24 52"/>
+          </svg>
+
+          <div class="pedido" aria-hidden="true">
+            <div class="pedido__cabecera">
+              <span class="pedido__inicial">C</span>
+              <span>
+                <span class="pedido__chat">Chat de Tu Amigo Serrano</span>
+                <span class="pedido__nombre">Claudia</span>
+              </span>
+            </div>
+            <p class="pedido__mensaje">Necesito un pintor en Salsipuedes</p>
+          </div>
+
+          <img class="hero__card" src="img/card-diego-santos.webp" alt=""
+               width="720" height="900" aria-hidden="true">
+        </div>
       </div>
 
       <!-- Sierras en dos capas: azul atrás y verde adelante.
