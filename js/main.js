@@ -82,3 +82,22 @@ if (hero && botonFlotante) {
   }
 }
 
+
+
+/*
+  Animación de "Cómo funciona"
+  ----------------------------
+  Los tres pasos aparecen uno detrás del otro y una línea los une,
+  una sola vez, cuando la sección entra en pantalla.
+*/
+const listaPasos = document.querySelector(".pasos");
+if (listaPasos && "IntersectionObserver" in window) {
+  listaPasos.classList.add("pasos--animado");
+  const vigiaPasos = new IntersectionObserver(function (entradas) {
+    if (entradas[0].isIntersecting) {
+      listaPasos.classList.add("pasos--en-vista");
+      vigiaPasos.disconnect();
+    }
+  }, { threshold: 0.35 });
+  vigiaPasos.observe(listaPasos);
+}

@@ -316,7 +316,7 @@ a {
   color: var(--celeste-niebla);
   padding-top: 32px;
   /* espacio extra abajo para la silueta de las sierras */
-  padding-bottom: clamp(96px, 12vw, 170px);
+  padding-bottom: clamp(100px, 13vw, 190px);
   --foco: var(--amarillo-sol);
 }
 
@@ -360,46 +360,43 @@ a {
   font-size: var(--tam-chico);
 }
 
-/* Logo dentro del círculo azul profundo.
-   En celular va arriba del texto (order: -1) y chico. */
-.hero__sello {
-  order: -1;
-  display: grid;
-  place-items: center;
-  width: 96px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--azul-profundo);
+/* Foto de la zona. En celular va debajo del texto, apaisada. */
+.hero__foto {
+  margin: 8px 0 0;
+  border-radius: var(--radio-bloque);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
 }
-.hero__sello img {
-  width: 54%;
-  height: auto;
-  /* el dibujo de la A es un poco más alto que ancho:
-     lo bajamos apenas para que se vea centrado ópticamente */
-  transform: translate(-3%, 2%);
+.hero__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
 }
 
-/* ---------- Sierra del hero: una línea y el sol, quietos ---------- */
+/* ---------- Sierras del hero: dos capas y el sol ----------
+   El sol va detrás de las lomas (en el HTML está antes) y sale una vez. */
 .hero__sierras {
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -1px;                       /* -1px evita una rayita con la sección de abajo */
   width: 100%;
-  height: clamp(70px, 10vw, 140px);
+  height: clamp(70px, 10vw, 150px);
 }
-.hero__linea {
-  fill: none;
-  stroke: var(--verde-loma);
-  stroke-width: 2.5;
-  vector-effect: non-scaling-stroke;   /* el grosor no se deforma al estirar el dibujo */
-}
+.hero__loma-atras    { fill: #2D5374; }            /* azul lago mezclado con el cielo */
+.hero__loma-adelante { fill: var(--verde-serrano); }
 .hero__sol {
   position: absolute;
   left: clamp(40px, 16vw, 230px);
-  bottom: clamp(26px, 4.2vw, 58px);     /* apoyado sobre la línea, como saliendo */
-  width: clamp(22px, 2.4vw, 34px);
+  bottom: clamp(52px, 8vw, 116px);
+  width: clamp(24px, 2.6vw, 38px);
   height: auto;
   fill: var(--amarillo-sol);
+  animation: sol-sale 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both;
+}
+@keyframes sol-sale {
+  from { transform: translateY(70px); }
+  to   { transform: translateY(0); }
 }
 
 
@@ -415,6 +412,22 @@ a {
   padding: 24px;
   background: var(--gris-niebla);
   border-radius: var(--radio-tarjeta);
+}
+
+/* Animación de "Cómo funciona" (una sola vez, al llegar a la sección).
+   main.js agrega "pasos--animado" al cargar y "pasos--en-vista" cuando se ve.
+   Sin JavaScript, los pasos se ven normales. */
+.pasos--animado .paso {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.pasos--en-vista .paso {
+  animation: paso-aparece 0.5s ease-out forwards;
+}
+.pasos--en-vista .paso:nth-child(2) { animation-delay: 0.25s; }
+.pasos--en-vista .paso:nth-child(3) { animation-delay: 0.5s; }
+@keyframes paso-aparece {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .paso__numero {
@@ -442,7 +455,24 @@ a {
 }
 
 
-/* ---------- 7. Oficios ---------- */
+/* ---------- 7. Rubros ---------- */
+.rubros {
+  display: grid;
+  gap: 24px;
+}
+.rubros__grupo h3 {
+  margin-bottom: 10px;
+  font-size: 1.0625rem;
+  color: var(--azul-noche);
+}
+.rubros__mas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  color: var(--gris-piedra);
+}
 .oficios {
   display: flex;
   flex-wrap: wrap;
@@ -456,16 +486,16 @@ a {
   align-items: center;
   min-height: 44px;
   padding: 8px 18px;
+  border: 2px solid var(--gris-niebla);
   border-radius: var(--radio-pildora);
-  background: var(--celeste-niebla);
+  background: var(--blanco);
   color: var(--azul-profundo);
   font-weight: 700;
   font-size: var(--tam-chico);
 }
 
-/* La última etiqueta es un link: borde punteado y fondo blanco */
+/* El link "¿No lo ves? Preguntanos": borde punteado para que se note que se toca */
 .etiqueta--otro {
-  background: var(--blanco);
   border: 2px dashed var(--azul-lago);
   text-decoration: none;
 }
@@ -489,11 +519,6 @@ a {
   border-radius: var(--radio-tarjeta);
 }
 
-/* Gana sobre el color general de h3 porque una clase
-   tiene más especificidad que un selector de etiqueta. */
-.razon__titulo--verde {
-  color: var(--verde-serrano);
-}
 
 
 /* ---------- 9. Dónde estamos: pueblos + mapa real ----------
@@ -799,7 +824,7 @@ a {
   display: inline-block;
   padding-block: 11px;
   line-height: 22px;
-  color: var(--amarillo-sol);
+  color: var(--blanco);
   font-weight: 700;
   text-underline-offset: 4px;
 }
@@ -862,6 +887,22 @@ a {
   .pasos {
     grid-template-columns: repeat(3, 1fr);
   }
+  /* Línea que une los tres números. Cada tarjeta dibuja su tramo:
+     ::after desde su número hasta su borde derecho y ::before desde el
+     hueco anterior hasta su número. Así la línea queda DEBAJO de los
+     números y aparece junto con cada tarjeta. */
+  .paso { position: relative; }
+  .paso:not(:last-child)::after,
+  .paso:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    top: 43px;                         /* centro del número: 24px de padding + 20px */
+    height: 2px;
+    background: var(--verde-loma);
+  }
+  .paso:not(:last-child)::after { left: 44px; right: 0; }
+  .paso:not(:first-child)::before { left: -16px; width: 60px; }   /* 16px de hueco + 44px */
+  .paso__numero { position: relative; z-index: 1; }
 
   .bloque {
     grid-template-columns: 1.15fr 1fr;
@@ -897,10 +938,15 @@ a {
     gap: 48px;
   }
 
-  .hero__sello {
-    order: 0;                        /* vuelve a la columna derecha */
-    justify-self: center;
-    width: min(100%, 300px);
+  .hero__foto {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    max-height: 460px;
+    width: 100%;
+  }
+  .rubros {
+    grid-template-columns: 1.4fr 1fr 0.8fr;
+    align-items: start;
   }
 
   .razones {
@@ -921,4 +967,10 @@ a {
   *::after {
     transition: none !important;
   }
+  /* el sol ya está arriba y los pasos se ven de entrada */
+  .hero__sol,
+  .pasos--en-vista .paso {
+    animation: none !important;
+  }
+  .pasos--animado .paso { opacity: 1; transform: none; }
 }

@@ -65,7 +65,6 @@
           <li><a href="#como-funciona">Cómo funciona</a></li>
           <li><a href="#zona">Dónde estamos</a></li>
           <li><a href="#trabajadores">Trabajadores</a></li>
-          <li><a href="#comercios">Comercios</a></li>
         </ul>
       </nav>
 
@@ -99,17 +98,22 @@
           <p class="hero__nota">Sin apps ni registros. Te responde una persona.</p>
         </div>
 
-        <!-- Logo grande. aria-hidden porque es decorativo (el nombre ya está en el header) -->
-        <div class="hero__sello" aria-hidden="true">
-          <img src="img/logo.svg" alt="" width="170" height="200">
-        </div>
+        <!-- Foto de la zona (aportada por Juan). Reemplaza al logo grande,
+             que repetía el del header. -->
+        <figure class="hero__foto">
+          <img src="img/valle-sierras-chicas.webp"
+               alt="Valle verde de las Sierras Chicas, con casas entre los árboles y luz de la tarde"
+               width="900" height="840" fetchpriority="high">
+        </figure>
       </div>
 
-      <!-- Una sola línea de sierra y el sol, quietos. -->
-      <svg class="hero__sierras" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path class="hero__linea" d="M0 128 C170 96 300 86 430 104 C560 122 640 70 800 66 C960 62 1060 112 1200 104 C1300 98 1380 84 1440 88"/>
-      </svg>
+      <!-- Sierras en dos capas: azul atrás y verde adelante.
+           El sol está detrás y sale una sola vez al cargar la página. -->
       <svg class="hero__sol" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="20"/></svg>
+      <svg class="hero__sierras" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="hero__loma-atras" d="M0 180 L0 76 C150 30 270 20 400 50 C520 78 610 8 760 0 C900 -8 990 48 1120 38 C1240 30 1330 0 1440 12 L1440 180 Z"/>
+        <path class="hero__loma-adelante" d="M0 180 L0 116 C170 92 320 84 480 102 C620 118 720 80 880 82 C1040 84 1140 112 1280 106 C1360 102 1410 96 1440 98 L1440 180 Z"/>
+      </svg>
     </section>
 
 
@@ -149,22 +153,45 @@
       <div class="contenedor">
         <h2 id="titulo-oficios">¿Qué necesitás?</h2>
 
-        <!-- Para agregar un oficio: copiar una línea <li> y cambiar el texto -->
-        <ul class="oficios">
-          <li class="etiqueta">Albañilería</li>
-          <li class="etiqueta">Jardinería y poda</li>
-          <li class="etiqueta">Pintura</li>
-          <li class="etiqueta">Plomería</li>
-          <li class="etiqueta">Electricidad</li>
-          <li class="etiqueta">Limpieza de terreno</li>
-          <li class="etiqueta">Desmalezado</li>
-          <li>
-            <a class="etiqueta etiqueta--otro"
-               data-wa="vecino"
-               href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20a%20alguien%20para%20un%20trabajo"
-               target="_blank" rel="noopener">¿Otro? Preguntanos</a>
-          </li>
-        </ul>
+        <!-- Para agregar un rubro: copiar una línea <li class="etiqueta"> dentro del grupo -->
+        <div class="rubros">
+          <div class="rubros__grupo">
+            <h3>Casa y terreno</h3>
+            <ul class="oficios">
+              <li class="etiqueta">Pintura</li>
+              <li class="etiqueta">Jardinería</li>
+              <li class="etiqueta">Albañilería</li>
+              <li class="etiqueta">Poda y extracción de árboles</li>
+              <li class="etiqueta">Desmalezado y limpieza de terrenos</li>
+              <li class="etiqueta">Plomería</li>
+              <li class="etiqueta">Electricidad</li>
+              <li class="etiqueta">Gas</li>
+            </ul>
+          </div>
+          <div class="rubros__grupo">
+            <h3>Reparación técnica</h3>
+            <ul class="oficios">
+              <li class="etiqueta">Lavarropas</li>
+              <li class="etiqueta">Heladeras</li>
+              <li class="etiqueta">Aire acondicionado</li>
+              <li class="etiqueta">Computadoras y notebooks</li>
+              <li class="etiqueta">Televisores</li>
+            </ul>
+          </div>
+          <div class="rubros__grupo">
+            <h3>Hogar y servicios</h3>
+            <ul class="oficios">
+              <li class="etiqueta">Limpieza de casas</li>
+              <li class="etiqueta">Fletes y mudanzas</li>
+            </ul>
+          </div>
+        </div>
+        <p class="rubros__mas">¡Y mucho más! Herrería, carpintería, cerrajería, celulares, alarmas, portones…
+          <a class="etiqueta etiqueta--otro"
+             data-wa="vecino"
+             href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20a%20alguien%20para%20un%20trabajo"
+             target="_blank" rel="noopener">¿No lo ves? Preguntanos</a>
+        </p>
       </div>
     </section>
 
@@ -182,7 +209,7 @@
             <p>No le cobramos nada al vecino ni al trabajador. El precio lo arreglan entre ustedes.</p>
           </li>
           <li class="razon">
-            <h3 class="razon__titulo--verde">Recomendados de verdad</h3>
+            <h3>Recomendados de verdad</h3>
             <p>Antes de sumar a un trabajador hablamos con él y con un cliente que lo recomienda.</p>
           </li>
           <li class="razon">
@@ -285,46 +312,18 @@
 
 
     <!-- =====================================================
-         8. COMERCIOS
-         ===================================================== -->
-    <section class="seccion seccion--sin-arriba" id="comercios" aria-labelledby="titulo-comercios">
-      <div class="contenedor">
-        <div class="bloque bloque--azul">
-          <div class="bloque__texto">
-            <h2 id="titulo-comercios">¿Tenés un comercio? Sé Punto Amigo</h2>
-            <p>Te dejamos un cartel con QR para que tus clientes encuentren trabajadores de confianza. Sin costo, y cada mes te contamos cuántos vecinos llegaron desde tu comercio.</p>
-            <a class="boton boton--principal"
-               data-wa="comercio"
-               href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web.%20Tengo%20un%20comercio%20en%20la%20zona"
-               target="_blank" rel="noopener">Quiero ser Punto Amigo</a>
-          </div>
-
-          <div class="recuadro recuadro--borde">
-            <h3 class="recuadro__titulo">También ayudamos a comercios con herramientas simples:</h3>
-            <ul class="lista-puntos">
-              <li>Control de stock</li>
-              <li>Gestión para gastronomía</li>
-              <li>Calculadora de caja diaria</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- =====================================================
-         9. PREGUNTAS FRECUENTES
+         8. PREGUNTAS FRECUENTES
          <details> y <summary> abren y cierran solos, sin JavaScript.
          El atributo "open" deja la primera abierta al cargar.
          ===================================================== -->
-    <section class="seccion" id="preguntas" aria-labelledby="titulo-preguntas">
+    <section class="seccion seccion--sin-arriba" id="preguntas" aria-labelledby="titulo-preguntas">
       <div class="contenedor contenedor--angosto">
         <h2 id="titulo-preguntas">Preguntas frecuentes</h2>
 
         <div class="preguntas">
           <details class="pregunta" open>
             <summary>¿Cuánto cuesta?</summary>
-            <p>Nada. Tu Amigo Serrano es gratis para vecinos, trabajadores y comercios.</p>
+            <p>Nada. Tu Amigo Serrano es gratis para vecinos y trabajadores.</p>
           </details>
           <details class="pregunta">
             <summary>¿Ustedes hacen el trabajo?</summary>
@@ -346,7 +345,7 @@
 
 
   <!-- =====================================================
-       10. FOOTER
+       9. FOOTER
        ===================================================== -->
   <footer class="pie">
     <div class="contenedor pie__fila">
