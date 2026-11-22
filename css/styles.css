@@ -385,19 +385,10 @@ a {
   height: clamp(70px, 10vw, 150px);
 }
 .hero__sierras { overflow: visible; }
-/* Al scrollear, main.js pone en el hero la variable --scroll, que va de
-   0 (arriba de todo) a 1 (el hero ya salió de pantalla). Cada capa se
-   mueve distinto con ese número: eso da la sensación de profundidad
-   (efecto "parallax"). Usamos la propiedad translate (y no transform)
-   para no pisar la animación del sol. */
-.hero__loma-atras {
-  fill: #2D5374;                     /* azul lago mezclado con el cielo */
-  translate: calc(var(--scroll, 0) * -90px) calc(var(--scroll, 0) * -18px);
-}
-.hero__loma-adelante {
-  fill: var(--verde-serrano);
-  translate: calc(var(--scroll, 0) * 70px) 0;
-}
+/* Las lomas se ondulan al scrollear: main.js redibuja su forma
+   (el atributo "d" del path) en cada cuadro. Ver main.js. */
+.hero__loma-atras    { fill: #2D5374; }            /* azul lago mezclado con el cielo */
+.hero__loma-adelante { fill: var(--verde-serrano); }
 .hero__sol {
   position: absolute;
   left: clamp(40px, 16vw, 230px);

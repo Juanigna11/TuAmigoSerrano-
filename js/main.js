@@ -111,27 +111,57 @@ if (listaPasos && "IntersectionObserver" in window) {
 
 
 /*
-  Sierras que se mueven al scrollear (parallax)
-  ---------------------------------------------
-  Calculamos cuánto del hero ya pasó (de 0 a 1) y lo guardamos en la
-  variable CSS --scroll. El CSS decide cuánto se mueve cada capa.
-  - requestAnimationFrame: hace el cálculo una vez por cuadro de la
-    pantalla, aunque el evento scroll se dispare muchas más veces.
-  - { passive: true }: le avisa al navegador que no vamos a frenar el
-    scroll, así no se pone pesado en el celular.
-  - Si la persona pidió "reducir movimiento", no hacemos nada.
+  Sierras que se ondulan al scrollear
+  -----------------------------------
+  Cada loma es una suma de dos ondas (senos). Al scrollear, cambiamos
+  la "fase" de las ondas, o sea, las corremos: la forma se va
+  ondulando como si las sierras respiraran.
+  - Cada capa tiene ondas y velocidades distintas: así parecen estar a
+    distinta distancia (la de atrás se mueve más lento).
+  - armarLoma() arma el texto del atributo "d" del <path>: una lista de
+    puntos (L x y) que el navegador une con líneas cortas.
+  - requestAnimationFrame: redibuja una vez por cuadro de la pantalla,
+    aunque el evento scroll se dispare muchas más veces.
+  - { passive: true }: el navegador no espera a nuestro código para
+    scrollear, así no se pone pesado en el celular.
+  - Con "reducir movimiento" las lomas quedan quietas.
+  También ponemos --scroll en el hero (de 0 a 1), que el CSS usa para
+  esconder el sol detrás de las lomas.
 */
 const heroSierras = document.querySelector(".hero");
 const pideMenosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lomaAtras = document.querySelector(".hero__loma-atras");
+const lomaAdelante = document.querySelector(".hero__loma-adelante");
 
-if (heroSierras && !pideMenosMovimiento) {
+// base: altura media de la loma (el dibujo mide 180 de alto; 0 es arriba)
+// ondas: [altura, largo de la onda, velocidad al scrollear]
+const FORMA_ATRAS    = { base: 46,  ondas: [[26, 520, 0.010], [10, 230, -0.018]] };
+const FORMA_ADELANTE = { base: 102, ondas: [[12, 640, -0.014], [6, 300, 0.022]] };
+
+function armarLoma(forma, desplazo) {
+  let d = "M-160 180";
+  for (let x = -160; x <= 1620; x += 20) {
+    let y = forma.base;
+    forma.ondas.forEach(function (onda) {
+      const [alto, largo, velocidad] = onda;
+      y += alto * Math.sin((x / largo) * 2 * Math.PI + desplazo * velocidad);
+    });
+    d += " L" + x + " " + y.toFixed(1);
+  }
+  return d + " L1620 180 Z";
+}
+
+if (heroSierras && lomaAtras && lomaAdelante && !pideMenosMovimiento) {
   let cuadroPendiente = false;
 
   function moverSierras() {
-    const alto = heroSierras.offsetHeight;
-    const avance = Math.min(Math.max(window.scrollY / alto, 0), 1);
-    heroSierras.style.setProperty("--scroll", avance.toFixed(3));
     cuadroPendiente = false;
+    const y = window.scrollY;
+    if (y > heroSierras.offsetHeight) return;   // el hero ya no se ve: no gastamos
+    lomaAtras.setAttribute("d", armarLoma(FORMA_ATRAS, y));
+    lomaAdelante.setAttribute("d", armarLoma(FORMA_ADELANTE, y));
+    const avance = Math.min(y / heroSierras.offsetHeight, 1);
+    heroSierras.style.setProperty("--scroll", avance.toFixed(3));
   }
 
   window.addEventListener("scroll", function () {
@@ -146,12 +176,12 @@ if (heroSierras && !pideMenosMovimiento) {
 
 
 /*
-  Pelotita que recorre "Cómo funciona"
+  Sol que salta por "Cómo funciona"
   ------------------------------------
   1. Calculamos "avance": 0 cuando la sección recién asoma por abajo de
      la pantalla y 1 cuando ya la recorriste.
   2. Con ese número ubicamos la pelotita entre el centro del número 1
-     y el del 3 (pasando por el 2).
+     y el del 3 (pasando por el 2), saltando en arco de uno al otro.
   3. Cada número que la pelotita ya alcanzó se pinta de verde.
   En celular la pelotita no se muestra (el CSS la oculta), pero los
   números se pintan igual a medida que bajás.
@@ -189,7 +219,11 @@ if (pasosLista && numerosPasos.length && !pideMenosMovimiento) {
     const i = Math.min(Math.floor(posicion), tramos - 1);
     const t = posicion - i;
     const x = centros[i].x + (centros[i + 1].x - centros[i].x) * t;
-    const y = centros[i].y + (centros[i + 1].y - centros[i].y) * t;
+    // Salto: Math.sin(Math.PI * t) vale 0 al salir, 1 en la mitad y 0 al
+    // llegar. Multiplicado por la altura del salto, dibuja un arco.
+    const ALTURA_SALTO = 46;
+    const y = centros[i].y + (centros[i + 1].y - centros[i].y) * t
+              - ALTURA_SALTO * Math.sin(Math.PI * t);
     pelotita.style.translate = (x - 8) + "px " + (y - 8) + "px";   // 8 = mitad de la pelotita
 
     numerosPasos.forEach(function (numero, n) {
