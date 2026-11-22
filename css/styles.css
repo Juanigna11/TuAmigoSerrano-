@@ -318,6 +318,7 @@ a {
   /* espacio extra abajo para la silueta de las sierras */
   padding-bottom: clamp(100px, 13vw, 190px);
   --foco: var(--amarillo-sol);
+  overflow-x: clip;                  /* las lomas son más anchas que la pantalla para poder moverse */
 }
 
 .hero__grilla {
@@ -383,8 +384,20 @@ a {
   width: 100%;
   height: clamp(70px, 10vw, 150px);
 }
-.hero__loma-atras    { fill: #2D5374; }            /* azul lago mezclado con el cielo */
-.hero__loma-adelante { fill: var(--verde-serrano); }
+.hero__sierras { overflow: visible; }
+/* Al scrollear, main.js pone en el hero la variable --scroll, que va de
+   0 (arriba de todo) a 1 (el hero ya salió de pantalla). Cada capa se
+   mueve distinto con ese número: eso da la sensación de profundidad
+   (efecto "parallax"). Usamos la propiedad translate (y no transform)
+   para no pisar la animación del sol. */
+.hero__loma-atras {
+  fill: #2D5374;                     /* azul lago mezclado con el cielo */
+  translate: calc(var(--scroll, 0) * -90px) calc(var(--scroll, 0) * -18px);
+}
+.hero__loma-adelante {
+  fill: var(--verde-serrano);
+  translate: calc(var(--scroll, 0) * 70px) 0;
+}
 .hero__sol {
   position: absolute;
   left: clamp(40px, 16vw, 230px);
@@ -392,6 +405,7 @@ a {
   width: clamp(24px, 2.6vw, 38px);
   height: auto;
   fill: var(--amarillo-sol);
+  translate: 0 calc(var(--scroll, 0) * 60px);   /* al bajar, el sol se esconde */
   animation: sol-sale 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both;
 }
 @keyframes sol-sale {
@@ -818,15 +832,9 @@ a {
   color: var(--blanco);
 }
 
-/* inline-block (y no inline-flex) para que se respete el espacio
-   entre "WhatsApp:" y el número. El padding le da 44px de alto. */
+/* El link del pie ahora es un botón verde como los demás */
 .pie__whatsapp {
-  display: inline-block;
-  padding-block: 11px;
-  line-height: 22px;
-  color: var(--blanco);
-  font-weight: 700;
-  text-underline-offset: 4px;
+  gap: 0.3em;                        /* espacio entre "WhatsApp" y el número */
 }
 
 
@@ -887,22 +895,6 @@ a {
   .pasos {
     grid-template-columns: repeat(3, 1fr);
   }
-  /* Línea que une los tres números. Cada tarjeta dibuja su tramo:
-     ::after desde su número hasta su borde derecho y ::before desde el
-     hueco anterior hasta su número. Así la línea queda DEBAJO de los
-     números y aparece junto con cada tarjeta. */
-  .paso { position: relative; }
-  .paso:not(:last-child)::after,
-  .paso:not(:first-child)::before {
-    content: "";
-    position: absolute;
-    top: 43px;                         /* centro del número: 24px de padding + 20px */
-    height: 2px;
-    background: var(--verde-loma);
-  }
-  .paso:not(:last-child)::after { left: 44px; right: 0; }
-  .paso:not(:first-child)::before { left: -16px; width: 60px; }   /* 16px de hueco + 44px */
-  .paso__numero { position: relative; z-index: 1; }
 
   .bloque {
     grid-template-columns: 1.15fr 1fr;

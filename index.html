@@ -108,11 +108,14 @@
       </div>
 
       <!-- Sierras en dos capas: azul atrás y verde adelante.
-           El sol está detrás y sale una sola vez al cargar la página. -->
+           El sol está detrás y sale una sola vez al cargar la página.
+           Al scrollear, cada capa se corre distinto (ver main.js).
+           Las lomas son más anchas que el dibujo (de -160 a 1620) para
+           que al correrse nunca se vea un borde. -->
       <svg class="hero__sol" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="20"/></svg>
       <svg class="hero__sierras" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path class="hero__loma-atras" d="M0 180 L0 76 C150 30 270 20 400 50 C520 78 610 8 760 0 C900 -8 990 48 1120 38 C1240 30 1330 0 1440 12 L1440 180 Z"/>
-        <path class="hero__loma-adelante" d="M0 180 L0 116 C170 92 320 84 480 102 C620 118 720 80 880 82 C1040 84 1140 112 1280 106 C1360 102 1410 96 1440 98 L1440 180 Z"/>
+        <path class="hero__loma-atras" d="M-160 180 L-160 96 C-90 84 -40 78 0 76 C150 30 270 20 400 50 C520 78 610 8 760 0 C900 -8 990 48 1120 38 C1240 30 1330 0 1440 12 C1500 18 1560 34 1620 40 L1620 180 Z"/>
+        <path class="hero__loma-adelante" d="M-160 180 L-160 104 C-100 112 -50 118 0 116 C170 92 320 84 480 102 C620 118 720 80 880 82 C1040 84 1140 112 1280 106 C1360 102 1410 96 1440 98 C1500 100 1560 110 1620 116 L1620 180 Z"/>
       </svg>
     </section>
 
@@ -354,10 +357,10 @@
         <span><strong>Tu Amigo Serrano</strong> · Red de vecinos y trabajadores de Sierras Chicas, Córdoba</span>
       </p>
       <!-- El número (data-wa-numero) lo completa main.js desde config.js -->
-      <a class="pie__whatsapp"
+      <a class="boton boton--principal boton--chico pie__whatsapp"
          data-wa="general"
          href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web"
-         target="_blank" rel="noopener">WhatsApp: <span data-wa-numero>3543 691050</span></a>
+         target="_blank" rel="noopener">WhatsApp <span data-wa-numero>3543 691050</span></a>
     </div>
   </footer>
 

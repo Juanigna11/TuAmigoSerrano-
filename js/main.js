@@ -87,8 +87,7 @@ if (hero && botonFlotante) {
 /*
   Animación de "Cómo funciona"
   ----------------------------
-  Los tres pasos aparecen uno detrás del otro y una línea los une,
-  una sola vez, cuando la sección entra en pantalla.
+  Los tres pasos aparecen uno detrás del otro, una sola vez, cuando la sección entra en pantalla.
 */
 const listaPasos = document.querySelector(".pasos");
 if (listaPasos && "IntersectionObserver" in window) {
@@ -100,4 +99,39 @@ if (listaPasos && "IntersectionObserver" in window) {
     }
   }, { threshold: 0.35 });
   vigiaPasos.observe(listaPasos);
+}
+
+
+/*
+  Sierras que se mueven al scrollear (parallax)
+  ---------------------------------------------
+  Calculamos cuánto del hero ya pasó (de 0 a 1) y lo guardamos en la
+  variable CSS --scroll. El CSS decide cuánto se mueve cada capa.
+  - requestAnimationFrame: hace el cálculo una vez por cuadro de la
+    pantalla, aunque el evento scroll se dispare muchas más veces.
+  - { passive: true }: le avisa al navegador que no vamos a frenar el
+    scroll, así no se pone pesado en el celular.
+  - Si la persona pidió "reducir movimiento", no hacemos nada.
+*/
+const heroSierras = document.querySelector(".hero");
+const pideMenosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (heroSierras && !pideMenosMovimiento) {
+  let cuadroPendiente = false;
+
+  function moverSierras() {
+    const alto = heroSierras.offsetHeight;
+    const avance = Math.min(Math.max(window.scrollY / alto, 0), 1);
+    heroSierras.style.setProperty("--scroll", avance.toFixed(3));
+    cuadroPendiente = false;
+  }
+
+  window.addEventListener("scroll", function () {
+    if (!cuadroPendiente) {
+      cuadroPendiente = true;
+      requestAnimationFrame(moverSierras);
+    }
+  }, { passive: true });
+
+  moverSierras();
 }
