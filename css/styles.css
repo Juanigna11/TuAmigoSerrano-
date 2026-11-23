@@ -15,7 +15,7 @@
    7. Oficios
    8. Por qué
    9. Dónde estamos
-   10. Bloques Trabajadores y Comercios
+   10. Trabajadores: formulario de alta (y el ícono de Facebook)
    11. Preguntas frecuentes
    12. Footer
    13. Botón flotante
@@ -33,11 +33,19 @@
   --celeste-niebla: #CFE0EC;
   --verde-loma: #8DBA6E;
   --verde-serrano: #24543F;
+  --verde-serrano-hover: #2E6A50;     /* hover del botón principal */
+  --verde-loma-texto: #6E9F55;        /* verde loma que se lee sobre blanco (textos grandes, íconos) */
   --amarillo-sol: #F2B33D;
   --negro-carbon: #15191D;
   --gris-piedra: #5B6670;
   --gris-niebla: #E9ECEE;
   --blanco: #FFFFFF;
+  --rojo-error: #B42318;              /* SOLO errores de formulario (agregado 23/11) */
+
+  /* Colores de cada tramo (pueblos, mapa y formulario de alta) */
+  --color-sur: var(--azul-lago);
+  --color-centro: var(--verde-serrano);
+  --color-norte: var(--verde-loma-texto);
 
   /* Tipografías */
   --fuente-titulos: "Bricolage Grotesque", system-ui, sans-serif;
@@ -108,6 +116,11 @@ h3 {
   font-weight: 700;
   line-height: 1.25;
   color: var(--azul-profundo);
+}
+
+/* El atributo hidden siempre oculta, aunque una clase le ponga display */
+[hidden] {
+  display: none !important;
 }
 
 img, svg {
@@ -202,16 +215,7 @@ a {
   box-shadow: inset 0 0 0 2px var(--verde-loma);
 }
 .boton--principal:hover {
-  background: #2E6A50;               /* el mismo verde, un poco más claro */
-}
-/* Sobre el bloque verde, el botón se invierte para que no se pierda */
-.bloque--verde .boton--principal {
-  background: var(--blanco);
-  color: var(--verde-serrano);
-  box-shadow: none;
-}
-.bloque--verde .boton--principal:hover {
-  background: var(--celeste-niebla);
+  background: var(--verde-serrano-hover);
 }
 
 .boton--secundario {
@@ -273,6 +277,7 @@ a {
   font-size: 1.125rem;
   letter-spacing: -0.02em;
   text-decoration: none;
+  white-space: nowrap;               /* el nombre nunca se parte en dos líneas */
 }
 
 .marca__logo {
@@ -367,8 +372,12 @@ a {
    Al cargar aparecen en orden: pedido → línea → card. */
 .hero__visual {
   position: relative;
-  margin-top: 32px;                  /* lugar para el pedido que asoma por arriba */
-  margin-bottom: 72px;               /* y para la card que asoma por abajo */
+  /* Ancho máximo: en tablet la foto no crece tanto, y así el pedido
+     (que asoma 8% arriba) y la card (16% abajo) entran en estos márgenes
+     sin tapar la nota ni la cinta de oficios. */
+  max-width: 440px;
+  margin-top: 40px;                  /* lugar para el pedido que asoma por arriba */
+  margin-bottom: 80px;               /* y para la card que asoma por abajo */
 }
 .hero__visual .hero__foto { aspect-ratio: 1 / 1; }   /* en celular, cuadrada: entran las dos tarjetas */
 .hero__conexion {
@@ -742,9 +751,6 @@ a {
    A la izquierda, el título y los pueblos por tramo (botones).
    A la derecha, el mapa (Leaflet + OpenStreetMap). */
 .zona {
-  --color-sur: var(--azul-lago);
-  --color-centro: var(--verde-serrano);
-  --color-norte: #6E9F55;               /* verde loma un poco más oscuro: se lee sobre blanco */
   display: grid;
   gap: 24px;
 }
@@ -898,57 +904,359 @@ a {
 }
 
 
-/* ---------- 10. Bloques Trabajadores y Comercios ---------- */
-.bloque {
+/* ---------- 10. Trabajadores: formulario de alta ----------
+   Fondo gris niebla (lo pone .seccion--gris). Campos blancos con
+   radio-tarjeta y chips con el mismo estilo que las etiquetas.
+   En celular, una columna: formulario, botón y abajo las tarjetas.
+   En escritorio: formulario (60%) | tarjetas (40%), ver sección 14. */
+.alta {
   display: grid;
-  gap: 28px;
-  padding: 32px 22px;
-  border-radius: var(--radio-bloque);
-  color: var(--celeste-niebla);
-  --foco: var(--amarillo-sol);
+  gap: 48px;
+  --foco: var(--verde-serrano);          /* contorno de teclado en verde serrano */
 }
-
-.bloque--verde { background: var(--verde-serrano); }
-.bloque--azul { background: var(--azul-profundo); }
-
-.bloque h2 {
-  margin-bottom: 14px;
-  color: var(--blanco);
+.alta h2 {
+  margin-bottom: 12px;
 }
-
-.bloque__texto p {
-  margin-bottom: 24px;
+.alta__bajada {
   max-width: 36rem;
+  margin-bottom: 32px;
+  color: var(--gris-piedra);
 }
 
-.recuadro {
-  align-self: center;
-  padding: 22px;
-  border-radius: var(--radio-tarjeta);
-  font-size: var(--tam-chico);
+.formulario__grilla {
+  display: grid;
+  gap: 24px;
 }
 
-.recuadro--verde {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.recuadro--borde {
-  border: 2px solid var(--azul-lago);
-}
-
-.recuadro__titulo {
-  margin-bottom: 10px;
-  color: var(--blanco);
-  font-size: 1rem;
-}
-
-.recuadro__lista {
+/* Cada campo: etiqueta, control, ayuda y error, uno debajo del otro */
+.campo {
   display: grid;
   gap: 8px;
-  padding-left: 1.2em;
+  align-content: start;
+  min-width: 0;                          /* deja que el campo se achique en pantallas chicas */
 }
-.recuadro__lista li::marker {
-  color: var(--verde-loma);
+fieldset.campo {                         /* el fieldset trae borde y márgenes de fábrica */
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.campo label,
+.campo legend {
+  padding: 0;
+  color: var(--azul-profundo);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.campo legend {
+  margin-bottom: 8px;
+}
+.campo__opcional {
+  color: var(--gris-piedra);
+  font-weight: 400;
+}
+.campo__ayuda {
+  color: var(--gris-piedra);
+  font-size: var(--tam-chico);
+  line-height: 1.5;
+}
+.campo__error {
+  color: var(--rojo-error);
+  font-size: var(--tam-chico);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Cajas de texto y desplegable */
+.campo input:is([type="text"], [type="tel"], [type="number"]),
+.campo select {
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 2px solid var(--gris-niebla);
+  border-radius: var(--radio-tarjeta);
+  background-color: var(--blanco);
+  color: var(--negro-carbon);
+  font: inherit;
+}
+.campo input::placeholder {
+  color: var(--gris-piedra);
+}
+/* Desplegable: sacamos la flecha de fábrica y dibujamos una en azul lago */
+.campo select {
+  appearance: none;
+  padding-right: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%233E6E96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+/* Foco: borde y contorno verde serrano. El radio se repite porque la
+   regla general de :focus-visible (sección 2) lo pone en 4px. */
+.campo input:focus-visible,
+.campo select:focus-visible {
+  border-color: var(--verde-serrano);
+  border-radius: var(--radio-tarjeta);
+  outline-offset: 2px;
+}
+/* Campo con error (aria-invalid lo pone alta.js).
+   Especificidad: tiene que pesar igual que la regla de las cajas de arriba
+   (.campo input:is([type=...]) = 0,2,1); como está escrita después, gana. */
+.campo :is(input, select)[aria-invalid="true"] {
+  border-color: var(--rojo-error);
+}
+
+/* Chips para tocar (Otros oficios, Localidades).
+   Adentro de cada chip hay una casilla real: invisible a la vista,
+   pero el teclado y el lector de pantalla la usan normalmente. */
+.chips-grupos {
+  display: grid;
+  gap: 20px;
+}
+.chips-grupo__titulo {
+  margin-bottom: 8px;
+  color: var(--gris-piedra);
+  font-weight: 700;
+  font-size: var(--tam-chico);
+}
+.chips-grupo__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin-bottom: 4px;
+}
+.chips-grupo__cabeza .tramo__nombre {   /* "Tramo Sur" con su puntito de color */
+  margin: 0;
+  color: var(--azul-profundo);
+  font-size: 1rem;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip-opcion {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+.chip-opcion input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+.chip-opcion span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 2px solid var(--gris-niebla);
+  border-radius: var(--radio-pildora);
+  background: var(--blanco);
+  color: var(--azul-profundo);
+  font-weight: 700;
+  font-size: var(--tam-chico);
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.chip-opcion:hover span {
+  border-color: var(--verde-serrano);
+}
+/* Elegido: verde serrano con texto blanco y una tilde */
+.chip-opcion input:checked + span {
+  background: var(--verde-serrano);
+  border-color: var(--verde-serrano);
+  color: var(--blanco);
+}
+.chip-opcion input:checked + span::before {
+  content: "✓";
+  margin-right: 6px;
+}
+.chip-opcion input:focus-visible + span {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+/* Botón "Todo el tramo": parece un link, pero es un botón */
+.chips-grupo__todo {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--azul-lago);
+  font: inherit;
+  font-weight: 700;
+  font-size: var(--tam-chico);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.chips-grupo__todo[aria-pressed="true"]::before {
+  content: "✓ ";
+}
+
+/* Referencias: nombre | teléfono */
+.referencia__fila {
+  display: grid;
+  gap: 16px;
+}
+.referencia__fila label {
+  font-weight: 600;
+}
+
+/* Reglas y casilla de "Acepto" */
+.reglas__detalle summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--azul-lago);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.reglas__detalle ul {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 16px 20px 16px 36px;
+  border-radius: var(--radio-tarjeta);
+  background: var(--blanco);
+  font-size: var(--tam-chico);
+}
+.casilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.casilla input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--verde-serrano);   /* color de la tilde de la casilla */
+}
+.casilla input[aria-invalid="true"] {
+  outline: 2px solid var(--rojo-error);
+  outline-offset: 2px;
+}
+
+/* Botón de enviar: ancho completo, píldora como todos los botones */
+.formulario__enviar {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 32px;
+  border: 0;
+  font-size: 1.0625rem;
+  cursor: pointer;
+}
+.formulario__enviar:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+/* Sobre fondo claro el botón no lleva el borde verde loma (es para fondos azules) */
+.alta .boton--principal {
+  box-shadow: none;
+}
+
+/* Botón de contorno, para fondos claros */
+.boton--contorno {
+  border: 2px solid var(--verde-serrano);
+  background: var(--blanco);
+  color: var(--verde-serrano);
+}
+.boton--contorno:hover {
+  background: var(--gris-niebla);
+}
+
+/* Aviso si el envío falla */
+.formulario__fallo {
+  margin-top: 16px;
+  padding: 20px;
+  border: 2px solid var(--rojo-error);
+  border-radius: var(--radio-tarjeta);
+  background: var(--blanco);
+}
+.formulario__fallo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Campo trampa: fuera de la pantalla (no con display: none,
+   porque algunos robots saltean los campos que no se muestran) */
+.formulario__trampa {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.formulario__sin-js {
+  margin-top: 16px;
+}
+
+/* Mensaje de "¡Listo!" que reemplaza al formulario */
+.alta__listo {
+  padding: 32px 24px;
+  border-radius: var(--radio-tarjeta);
+  background: var(--blanco);
+  color: var(--azul-profundo);
+  font-weight: 700;
+  font-size: var(--tam-h3);
+  line-height: 1.35;
+}
+
+/* Tarjetas al costado: el mismo estilo que las de "Por qué" (.razon) */
+.alta__tarjetas {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 0;
+  list-style: none;
+}
+.alta__link {
+  color: var(--verde-serrano);
+  font-weight: 700;
+}
+
+/* Desde 600px: campos de a dos por fila; los anchos ocupan toda la fila */
+@media (min-width: 600px) {
+  .formulario__grilla,
+  .referencia__fila {
+    grid-template-columns: 1fr 1fr;
+  }
+  .campo--ancho {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ---------- Ícono de Facebook (header y footer) ----------
+   Área táctil de 44 px, en celeste niebla; blanco al pasar el mouse. */
+.facebook {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--celeste-niebla);
+  transition: color 0.15s, background-color 0.15s;
+}
+.facebook:hover {
+  color: var(--blanco);
+  background: rgba(207, 224, 236, 0.12);
+}
+/* En el header solo se ve en pantallas anchas (ver sección 14) */
+.cabecera__facebook {
+  display: none;
 }
 
 
@@ -1035,6 +1343,14 @@ a {
   color: var(--blanco);
 }
 
+/* WhatsApp y Facebook, uno al lado del otro */
+.pie__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 /* El link del pie ahora es un botón verde como los demás */
 .pie__whatsapp {
   gap: 0.3em;                        /* espacio entre "WhatsApp" y el número */
@@ -1084,16 +1400,11 @@ a {
   }
 }
 
-/* Desde 768px (tablet): aparece el menú y se va el botón flotante */
+/* Desde 768px (tablet): se va el botón flotante */
 @media (min-width: 768px) {
   :root {
     --margen-lateral: 32px;
     --alto-header: 72px;
-  }
-
-  .menu {
-    display: block;
-    margin-left: auto;               /* empuja el menú hacia la derecha */
   }
 
   .pasos {
@@ -1113,12 +1424,6 @@ a {
     will-change: translate;          /* le avisa al navegador que se va a mover */
   }
 
-  .bloque {
-    grid-template-columns: 1.15fr 1fr;
-    align-items: center;
-    gap: 40px;
-    padding: 48px 44px;
-  }
 
   .pie {
     padding-bottom: 32px;
@@ -1132,6 +1437,19 @@ a {
 
   .flotante {
     display: none;
+  }
+}
+
+/* Desde 900px: menú e ícono de Facebook en el header.
+   (Entre 768 y 900 no entran al lado del nombre y el botón.) */
+@media (min-width: 900px) {
+  .menu {
+    display: block;
+    margin-left: auto;               /* empuja el menú hacia la derecha */
+  }
+
+  .cabecera__facebook {
+    display: inline-grid;
   }
 }
 
@@ -1155,7 +1473,7 @@ a {
   }
   /* En compu: la card de Diego asoma abajo a la izquierda, sobre el
      espacio entre el texto y la foto, y el pedido arriba a la derecha */
-  .hero__visual { margin: 0; }
+  .hero__visual { max-width: none; margin: 0; }
   .hero__visual .hero__foto { aspect-ratio: 4 / 5; }
   .hero__conexion { transform: none; }
   .pedido {
@@ -1178,6 +1496,20 @@ a {
 
   .razones {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .alta {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+  }
+}
+
+
+/* Entre 960 y 1120px la columna de texto es angosta: la card de Diego
+   asoma menos hacia la izquierda para no tapar la bajada ni los botones */
+@media (min-width: 960px) and (max-width: 1119px) {
+  .hero__card {
+    left: -2%;
   }
 }
 

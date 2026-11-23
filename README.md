@@ -1,7 +1,8 @@
 # Tu Amigo Serrano · Landing page
 
-Web pública de Tu Amigo Serrano, red de vecinos y trabajadores de las Sierras Chicas (Córdoba).
-Su único objetivo: que el visitante toque un botón y abra un chat de WhatsApp.
+Web pública de Tu Amigo Serrano: oficios y técnicos de Sierras Chicas (Córdoba), recomendados por tus vecinos.
+Publicada en https://tuamigoserrano.vercel.app (Vercel publica solo cada `git push` a `main`).
+Objetivos: que el vecino abra un chat de WhatsApp y que el trabajador se sume con el formulario de alta.
 
 HTML, CSS y JavaScript puros. Sin frameworks ni paso de compilación: lo que está en la carpeta es lo que se publica.
 
@@ -10,8 +11,11 @@ HTML, CSS y JavaScript puros. Sin frameworks ni paso de compilación: lo que est
 ```
 index.html            Toda la página (textos, secciones, links)
 css/styles.css        Estilos. Arriba de todo están las variables de color y tipografía
-js/config.js          Número de WhatsApp y mensajes precargados  ← lo único que hay que tocar para el número
-js/main.js            Arma los links de WhatsApp desde config.js y maneja el botón flotante
+js/config.js          WhatsApp, Facebook y datos del Google Form  ← los datos que cambian están acá
+js/main.js            Links de WhatsApp y Facebook, cinta de oficios, sierras, sol de "Cómo funciona", botón flotante
+js/mapa.js            Mapa de "Dónde estamos" (Leaflet)
+js/alta.js            Formulario "Sumate gratis": valida y envía al Google Form
+docs/                 Guía de marca y tokens: leer antes de diseñar algo nuevo
 img/logo.svg          Logo (la A serrana)
 img/favicon.svg       Ícono de la pestaña (logo sobre círculo azul)
 img/og.png            Imagen que aparece al compartir el link (1200 × 630)
@@ -31,10 +35,28 @@ Todos los botones se actualizan solos.
 
 Opcional, pero recomendado: en `index.html` cada link de WhatsApp también tiene el `href` escrito completo,
 como respaldo por si JavaScript no carga. Para actualizarlos, usá "Buscar y reemplazar" en el editor:
-`549351XXXXXXX` → el número nuevo, y `351 XXX XXXX` → el número visible.
+`5493543691050` → el número nuevo, y `3543-691050` → el número visible.
 
 Para cambiar un mensaje precargado, editá el objeto `MENSAJES_WHATSAPP` en el mismo archivo.
 La clave (`vecino`, `trabajador`…) es la que usa el HTML en `data-wa="..."`.
+
+## Formulario de alta de trabajadores
+
+La sección "Sumate gratis" (`#trabajadores`) manda las respuestas al Google Form de siempre con `fetch()`,
+así caen en la hoja "Respuestas de alta" y la app de gestión crea al trabajador como Pendiente.
+Todo lo del Google Form está en `js/config.js`:
+
+- `FORM_ACTION` (adónde se envía) y `FORM_PUBLICO` (el formulario común, de respaldo).
+- `FORM_CAMPOS`: el código `entry.` de cada pregunta.
+- `FORM_RUBROS`, `FORM_TRAMOS` y `FORM_OFICIOS_CON_MATRICULA`: las opciones de los chips y el desplegable.
+
+**Si cambiás una pregunta u opción en el Google Form, cambiala también en `config.js`, letra por letra.**
+Si no coinciden, Google descarta la respuesta sin avisar (y la landing igual muestra "¡Listo!").
+Para ver los códigos `entry.`: abrí el Google Form, "Ver código fuente" y buscá `entry.`.
+
+## Facebook
+
+El link de la página está en `FACEBOOK_URL` (`js/config.js`). El ícono aparece en el footer y en el header en pantallas anchas.
 
 ## Editar textos y localidades
 

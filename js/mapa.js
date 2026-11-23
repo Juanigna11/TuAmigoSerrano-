@@ -42,7 +42,7 @@ if (!contenedorMapa || typeof L === "undefined") {
   if (contenedorMapa) contenedorMapa.closest(".zona__marco").hidden = true;
   chips.forEach(function (chip) {
     chip.addEventListener("click", function () {
-      window.open(armarLinkWhatsApp(MENSAJES_WHATSAPP.vecino + " en " + chip.dataset.pueblo), "_blank", "noopener");
+      window.open(armarLinkWhatsApp(MENSAJES_WHATSAPP.pueblo + " " + chip.dataset.pueblo), "_blank", "noopener");
     });
   });
 } else {
@@ -178,7 +178,7 @@ if (!contenedorMapa || typeof L === "undefined") {
       className: "etiqueta-pueblo",
     });
 
-    const link = armarLinkWhatsApp(MENSAJES_WHATSAPP.vecino + " en " + pueblo.nombre);
+    const link = armarLinkWhatsApp(MENSAJES_WHATSAPP.pueblo + " " + pueblo.nombre);
     pin.bindPopup(
       '<div class="globo-pueblo"><strong>' + pueblo.nombre + "</strong>" +
       "<span>Tramo " + pueblo.tramo + "</span><br>" +

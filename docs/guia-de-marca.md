@@ -44,7 +44,8 @@ Base azul (el cielo y las sierras de noche), verdes de la sierra y **un solo ace
 - **Verde WhatsApp** (`verde-whatsapp`) solo en lo que abre o nombra WhatsApp.
 - **Colores de tramo:** Sur `azul-lago` · Centro `verde-serrano` · Norte `verde-loma` (`verde-loma-texto` sobre blanco).
 - **Secciones:** se alternan blanco, `gris-niebla` y bloques de color (hero azul noche, "¿Qué necesitás?" en verde serrano, footer `azul-profundo`).
-- **Contraste:** `verde-loma` y `amarillo-sol` no van como texto sobre blanco. El contorno de foco es `azul-lago` sobre claro y `amarillo-sol` sobre azul o verde.
+- **Rojo de error** (`rojo-error`, agregado 23/11) **solo** para marcar errores en formularios: borde del campo y mensaje al lado. Nunca en botones, títulos ni fondos.
+- **Contraste:** `verde-loma` y `amarillo-sol` no van como texto sobre blanco. El contorno de foco es `azul-lago` sobre claro y `amarillo-sol` sobre azul o verde (en el formulario de alta, `verde-serrano`).
 
 ## 4. Tipografía
 
@@ -90,6 +91,7 @@ Con "reducir movimiento" (`prefers-reduced-motion`) no se anima nada: todo apare
 - **Etiqueta:** el chip de rubros y pueblos, y su variante "¿No lo ves? Preguntanos". Ver *Etiqueta*.
 - **Pedido:** el mensaje de un vecino en el chat de Tu Amigo Serrano. Ver *Pedido*.
 - **Sellos:** "Trabajador recomendado" (amarillo) y "Todo por WhatsApp". Ver *Sello*.
+- **Formulario** (alta de trabajadores en la landing): campos blancos con `radio-tarjeta` y borde `gris-niebla`, etiqueta visible arriba de cada campo, chips elegibles (elegido: `verde-serrano` con texto `blanco` y ✓), errores en `rojo-error` al lado del campo y botón principal a lo ancho.
 - **Card del trabajador** (1080 × 1350): la genera la app de gestión desde la hoja Trabajadores. Encabezado azul noche con el nombre de la marca y el sello amarillo, foto redonda, nombre en Bricolage, oficio en chip celeste, cajas gris niebla con zonas, experiencia, disponibilidad y otros oficios, tres fotos de trabajos y la barra "Escribile por WhatsApp" en azul profundo.
 
 ## 10. Dónde se usa

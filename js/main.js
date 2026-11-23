@@ -50,6 +50,11 @@ document.querySelectorAll("[data-wa-numero]").forEach(function (elemento) {
   elemento.textContent = NUMERO_VISIBLE;
 });
 
+// Links de Facebook (data-facebook): la dirección sale de config.js
+document.querySelectorAll("[data-facebook]").forEach(function (enlace) {
+  enlace.href = FACEBOOK_URL;
+});
+
 
 /* ---------- 3. Botón flotante ---------- */
 /*
