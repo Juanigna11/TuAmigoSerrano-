@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ===== SEO básico ===== -->
+  <title>Sumate gratis · Tu Amigo Serrano</title>
+  <meta name="description" content="¿Trabajás en un oficio o arreglás aparatos en Sierras Chicas? Sumate gratis a Tu Amigo Serrano y recibí pedidos de vecinos de tu zona, sin pagar comisión.">
+  <meta name="theme-color" content="#1F3B57">
+
+  <!-- ===== Open Graph: cómo se ve el link al compartirlo por WhatsApp/Facebook =====
+       Facebook y WhatsApp necesitan la URL COMPLETA de la imagen, no una ruta relativa. -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="Tu Amigo Serrano">
+  <meta property="og:title" content="Sumate gratis · Tu Amigo Serrano">
+  <meta property="og:description" content="¿Trabajás en un oficio o arreglás aparatos en Sierras Chicas? Sumate gratis a Tu Amigo Serrano y recibí pedidos de vecinos de tu zona, sin pagar comisión.">
+  <meta property="og:url" content="https://tuamigoserrano.vercel.app/sumate.html">
+  <meta property="og:image" content="https://tuamigoserrano.vercel.app/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo de Tu Amigo Serrano: una A verde con forma de cerro y un sol amarillo">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ===== Ícono de la pestaña ===== -->
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <!-- ===== Tipografías (Google Fonts) =====
+       preconnect abre la conexión con los servidores de fuentes antes de pedirlas,
+       y display=swap muestra el texto enseguida con una fuente de sistema
+       mientras se descarga la definitiva (no queda la página en blanco). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- defer: los scripts se ejecutan cuando terminó de cargar el HTML, en este orden -->
+  <script src="js/config.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/alta.js" defer></script>
+</head>
+<body>
+
+  <!-- Link oculto para quien navega con teclado: salta el menú y va directo al contenido -->
+  <a class="saltar" href="#contenido">Ir al contenido</a>
+
+  <!-- =====================================================
+       1. HEADER (fijo arriba)
+       ===================================================== -->
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a class="marca" href="index.html">
+        <img class="marca__logo" src="img/logo.svg" alt="" width="26" height="30">
+        <span>Tu Amigo Serrano</span>
+      </a>
+
+      <!-- En celular este menú se oculta con CSS (queda solo el logo y "Escribinos") -->
+      <nav class="menu" aria-label="Secciones de la página">
+        <ul>
+          <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+          <li><a href="index.html#zona">Dónde estamos</a></li>
+          <!-- aria-current="page": avisa al lector de pantalla que es la página en la que estás -->
+          <li><a href="sumate.html" aria-current="page">Soy trabajador</a></li>
+        </ul>
+      </nav>
+
+      <!-- Facebook: en celular se oculta con CSS (solo escritorio).
+           El href lo pone main.js desde config.js (FACEBOOK_URL); este es el respaldo.
+           El SVG es el logo oficial de Facebook (recursos de marca de Meta), en un solo color. -->
+      <a class="facebook cabecera__facebook" data-facebook
+         href="https://www.facebook.com/profile.php?id=61562444867883"
+         target="_blank" rel="noopener" aria-label="Tu Amigo Serrano en Facebook">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/>
+        </svg>
+      </a>
+
+      <a class="boton boton--principal boton--chico"
+         data-wa="general"
+         href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web"
+         target="_blank" rel="noopener">Escribinos</a>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <!-- =====================================================
+         FORMULARIO DE ALTA DE TRABAJADORES
+         Las respuestas van al Google Form de siempre (ver js/alta.js).
+         Las opciones del desplegable y de los chips NO están acá:
+         alta.js las arma desde js/config.js, así hay un solo lugar
+         donde tienen que coincidir con el Google Form.
+         ===================================================== -->
+    <section class="seccion seccion--gris pagina-alta" id="formulario" aria-labelledby="titulo-alta">
+      <div class="contenedor">
+        <div class="alta">
+          <div class="alta__principal">
+            <h1 id="titulo-alta">Sumate gratis</h1>
+            <p class="alta__bajada">¿Trabajás en un oficio o arreglás aparatos? Recibí pedidos de vecinos de tu zona, sin pagar comisión.</p>
+
+            <!-- novalidate: apagamos los mensajes automáticos del navegador
+                 para mostrar los nuestros, al lado de cada campo -->
+            <form class="formulario" id="form-alta" novalidate>
+
+              <!-- Campo trampa contra spam: una persona no lo ve ni llega con Tab;
+                   los robots completan todos los campos. Si viene lleno, no se envía. -->
+              <div class="formulario__trampa" aria-hidden="true">
+                <label for="campo-sitio">No completes este campo</label>
+                <input type="text" id="campo-sitio" name="sitio" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="formulario__grilla">
+                <div class="campo">
+                  <label for="campo-nombre">Nombre y apellido</label>
+                  <input type="text" id="campo-nombre" name="nombre" autocomplete="name"
+                         aria-describedby="error-nombre">
+                  <p class="campo__error" id="error-nombre" hidden></p>
+                </div>
+
+                <div class="campo">
+                  <label for="campo-whatsapp">WhatsApp</label>
+                  <!-- inputmode="numeric": en el celular abre el teclado de números -->
+                  <input type="tel" id="campo-whatsapp" name="whatsapp" inputmode="numeric"
+                         autocomplete="tel-national" placeholder="Ej.: 3543123456"
+                         aria-describedby="ayuda-whatsapp error-whatsapp">
+                  <p class="campo__ayuda" id="ayuda-whatsapp">Con característica, sin 0 ni 15.</p>
+                  <p class="campo__error" id="error-whatsapp" hidden></p>
+                </div>
+
+                <div class="campo">
+                  <label for="campo-oficio">Oficio principal</label>
+                  <select id="campo-oficio" name="oficio" aria-describedby="error-oficio">
+                    <option value="">Elegí tu oficio</option>
+                    <!-- alta.js agrega acá los rubros agrupados (<optgroup>) -->
+                  </select>
+                  <p class="campo__error" id="error-oficio" hidden></p>
+                </div>
+
+                <div class="campo">
+                  <label for="campo-experiencia">Años de experiencia</label>
+                  <input type="number" id="campo-experiencia" name="experiencia" min="0" max="60"
+                         inputmode="numeric" aria-describedby="error-experiencia">
+                  <p class="campo__error" id="error-experiencia" hidden></p>
+                </div>
+
+                <!-- fieldset + legend: agrupa varias casillas bajo una sola pregunta -->
+                <fieldset class="campo campo--ancho" id="grupo-otros" aria-describedby="ayuda-otros">
+                  <legend>Otros oficios</legend>
+                  <p class="campo__ayuda" id="ayuda-otros">Opcional. Tocá todos los que hagas además del principal.</p>
+                  <div class="chips-grupos" data-chips="otros"></div>
+                </fieldset>
+
+                <fieldset class="campo campo--ancho" id="grupo-localidades" aria-describedby="ayuda-localidades error-localidades">
+                  <legend>Localidades donde trabajás</legend>
+                  <p class="campo__ayuda" id="ayuda-localidades">Elegí al menos una.</p>
+                  <div class="chips-grupos" data-chips="localidades"></div>
+                  <p class="campo__error" id="error-localidades" hidden></p>
+                </fieldset>
+
+                <div class="campo campo--ancho">
+                  <label for="campo-disponibilidad">Disponibilidad</label>
+                  <input type="text" id="campo-disponibilidad" name="disponibilidad"
+                         aria-describedby="ayuda-disponibilidad error-disponibilidad">
+                  <p class="campo__ayuda" id="ayuda-disponibilidad">Ej.: lunes a sábado por la mañana</p>
+                  <p class="campo__error" id="error-disponibilidad" hidden></p>
+                </div>
+
+                <!-- Solo aparece si el oficio la pide (alta.js le saca el "hidden") -->
+                <div class="campo campo--ancho" id="bloque-matricula" hidden>
+                  <label for="campo-matricula">Matrícula</label>
+                  <input type="text" id="campo-matricula" name="matricula"
+                         aria-describedby="ayuda-matricula error-matricula">
+                  <p class="campo__ayuda" id="ayuda-matricula">Tu oficio la pide. Poné el número de tu matrícula.</p>
+                  <p class="campo__error" id="error-matricula" hidden></p>
+                </div>
+
+                <fieldset class="campo campo--ancho referencia">
+                  <legend>Referencia 1: un cliente que te recomiende</legend>
+                  <div class="referencia__fila">
+                    <div class="campo">
+                      <label for="campo-ref1-nombre">Nombre</label>
+                      <input type="text" id="campo-ref1-nombre" name="ref1Nombre" aria-describedby="error-ref1-nombre">
+                      <p class="campo__error" id="error-ref1-nombre" hidden></p>
+                    </div>
+                    <div class="campo">
+                      <label for="campo-ref1-telefono">Teléfono</label>
+                      <input type="tel" id="campo-ref1-telefono" name="ref1Telefono" inputmode="numeric"
+                             placeholder="Ej.: 3543123456" aria-describedby="error-ref1-telefono">
+                      <p class="campo__error" id="error-ref1-telefono" hidden></p>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="campo campo--ancho referencia">
+                  <legend>Referencia 2 <span class="campo__opcional">(opcional)</span></legend>
+                  <div class="referencia__fila">
+                    <div class="campo">
+                      <label for="campo-ref2-nombre">Nombre</label>
+                      <input type="text" id="campo-ref2-nombre" name="ref2Nombre" aria-describedby="error-ref2-nombre">
+                      <p class="campo__error" id="error-ref2-nombre" hidden></p>
+                    </div>
+                    <div class="campo">
+                      <label for="campo-ref2-telefono">Teléfono</label>
+                      <input type="tel" id="campo-ref2-telefono" name="ref2Telefono" inputmode="numeric"
+                             placeholder="Ej.: 3543123456" aria-describedby="error-ref2-telefono">
+                      <p class="campo__error" id="error-ref2-telefono" hidden></p>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="campo campo--ancho reglas">
+                  <details class="reglas__detalle">
+                    <summary>Ver las reglas</summary>
+                    <ul>
+                      <li>Tu Amigo Serrano no publica trabajos en grupos. Cuando un vecino necesita tu oficio en tu zona, le pasamos tu ficha con tu WhatsApp y te escribe directo.</li>
+                      <li>Al sumarte, aceptás que compartamos con los vecinos tu nombre, oficio, zonas, fotos de trabajos y número de WhatsApp.</li>
+                      <li>El precio y las condiciones se arreglan entre vecino y trabajador. Tu Amigo Serrano conecta: no cobra comisión ni garantiza el trabajo.</li>
+                      <li>Si te escribe un vecino, respondele aunque no puedas tomar el trabajo. Si por un tiempo no podés trabajar, avisanos y te pausamos.</li>
+                      <li>Después de cada trabajo le pedimos al vecino una calificación. Si varios vecinos cuentan que no respondiste o califican mal, tenemos una charla; si se repite, te damos de baja.</li>
+                    </ul>
+                  </details>
+                  <label class="casilla" for="campo-reglas">
+                    <input type="checkbox" id="campo-reglas" name="reglas" aria-describedby="error-reglas">
+                    <span>Acepto las reglas</span>
+                  </label>
+                  <p class="campo__error" id="error-reglas" hidden></p>
+                </div>
+              </div>
+
+              <button type="submit" class="boton boton--principal formulario__enviar">Quiero sumarme</button>
+
+              <!-- Aparece solo si el envío falla (sin conexión, por ejemplo).
+                   role="alert": el lector de pantalla lo lee apenas aparece. -->
+              <div class="formulario__fallo" id="alta-fallo" role="alert" hidden>
+                <p><strong>No pudimos enviar tus datos.</strong> Probá de nuevo o mandalos por otro lado:</p>
+                <div class="formulario__fallo-botones">
+                  <a class="boton boton--principal" data-wa="trabajador"
+                     href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web.%20Quiero%20sumarme%20como%20trabajador"
+                     target="_blank" rel="noopener">Mandalos por WhatsApp</a>
+                  <a class="boton boton--contorno" data-form-publico
+                     href="https://docs.google.com/forms/d/e/1FAIpQLScAekNS8ABDVobP8eklaVd2Vm4YQK9P3HWnzALeqefobJh5tw/viewform"
+                     target="_blank" rel="noopener">Completar el formulario de Google</a>
+                </div>
+              </div>
+
+              <!-- Sin JavaScript el formulario no puede enviar: ofrecemos el de Google -->
+              <noscript>
+                <p class="formulario__sin-js">Para sumarte, completá el
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScAekNS8ABDVobP8eklaVd2Vm4YQK9P3HWnzALeqefobJh5tw/viewform" target="_blank" rel="noopener">formulario de Google</a>.</p>
+              </noscript>
+            </form>
+
+            <!-- Reemplaza al formulario cuando se envió bien. tabindex="-1" deja
+                 mandarle el foco desde JS, para que el lector de pantalla lo lea. -->
+            <div class="alta__listo" id="alta-listo" tabindex="-1" hidden>
+              <p></p>
+            </div>
+          </div>
+
+          <!-- Tarjetas al costado (en celular quedan debajo del botón) -->
+          <ul class="alta__tarjetas">
+            <li class="razon">
+              <h3>Gratis y sin comisión</h3>
+              <p>No te cobramos nada, ni ahora ni por cada trabajo.</p>
+            </li>
+            <li class="razon">
+              <h3>Una charla corta</h3>
+              <p>Antes de empezar hablamos 15 minutos para conocerte.</p>
+            </li>
+            <li class="razon">
+              <h3>Fotos por WhatsApp</h3>
+              <p>No hace falta subir nada acá: te las pedimos después.</p>
+            </li>
+            <li class="razon">
+              <h3>¿Dudas?</h3>
+              <p>Escribinos al
+                <a class="alta__link" data-wa="general"
+                   href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web"
+                   target="_blank" rel="noopener"><span data-wa-numero>3543-691050</span></a>.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       9. FOOTER
+       ===================================================== -->
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <p class="pie__marca">
+        <img src="img/logo.svg" alt="" width="20" height="24">
+        <span><strong>Tu Amigo Serrano</strong> · Oficios y técnicos de Sierras Chicas, recomendados por tus vecinos</span>
+      </p>
+      <div class="pie__acciones">
+        <!-- El número (data-wa-numero) lo completa main.js desde config.js -->
+        <a class="boton boton--principal boton--chico pie__whatsapp"
+           data-wa="general"
+           href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web"
+           target="_blank" rel="noopener">WhatsApp <span data-wa-numero>3543-691050</span></a>
+        <a class="facebook" data-facebook
+           href="https://www.facebook.com/profile.php?id=61562444867883"
+           target="_blank" rel="noopener" aria-label="Tu Amigo Serrano en Facebook">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

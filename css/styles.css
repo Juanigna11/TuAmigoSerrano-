@@ -15,7 +15,7 @@
    7. Oficios
    8. Por qué
    9. Dónde estamos
-   10. Trabajadores: formulario de alta (y el ícono de Facebook)
+   10. Trabajadores: acceso y formulario de alta (y el ícono de Facebook)
    11. Preguntas frecuentes
    12. Footer
    13. Botón flotante
@@ -306,6 +306,12 @@ a {
   font-weight: 600;
   font-size: 0.9375rem;
   text-decoration: none;
+}
+/* La página en la que estás (sumate.html): blanco y subrayado */
+.menu a[aria-current="page"] {
+  color: var(--blanco);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 .menu a:hover {
   color: var(--blanco);
@@ -904,7 +910,9 @@ a {
 }
 
 
-/* ---------- 10. Trabajadores: formulario de alta ----------
+/* ---------- 10. Trabajadores: acceso en la portada y formulario (sumate.html) ----------
+   La portada reusa .alta y .alta__tarjetas para el acceso directo;
+   el formulario completo vive en sumate.html.
    Fondo gris niebla (lo pone .seccion--gris). Campos blancos con
    radio-tarjeta y chips con el mismo estilo que las etiquetas.
    En celular, una columna: formulario, botón y abajo las tarjetas.
@@ -914,6 +922,8 @@ a {
   gap: 48px;
   --foco: var(--verde-serrano);          /* contorno de teclado en verde serrano */
 }
+/* En la portada el título es h2; en sumate.html es el h1 de la página */
+.alta h1,
 .alta h2 {
   margin-bottom: 12px;
 }
@@ -1501,6 +1511,10 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
   .alta {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     align-items: start;
+  }
+  /* El acceso de la portada es corto: el texto va centrado al lado de las tarjetas */
+  .alta--acceso {
+    align-items: center;
   }
 }
 

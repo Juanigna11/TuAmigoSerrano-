@@ -9,12 +9,13 @@ HTML, CSS y JavaScript puros. Sin frameworks ni paso de compilación: lo que est
 ## Estructura
 
 ```
-index.html            Toda la página (textos, secciones, links)
+index.html            La portada (textos, secciones, links)
+sumate.html           Formulario de alta de trabajadores (página aparte)
 css/styles.css        Estilos. Arriba de todo están las variables de color y tipografía
 js/config.js          WhatsApp, Facebook y datos del Google Form  ← los datos que cambian están acá
 js/main.js            Links de WhatsApp y Facebook, cinta de oficios, sierras, sol de "Cómo funciona", botón flotante
 js/mapa.js            Mapa de "Dónde estamos" (Leaflet)
-js/alta.js            Formulario "Sumate gratis": valida y envía al Google Form
+js/alta.js            Formulario de sumate.html: valida y envía al Google Form
 docs/                 Guía de marca y tokens: leer antes de diseñar algo nuevo
 img/logo.svg          Logo (la A serrana)
 img/favicon.svg       Ícono de la pestaña (logo sobre círculo azul)
@@ -42,7 +43,11 @@ La clave (`vecino`, `trabajador`…) es la que usa el HTML en `data-wa="..."`.
 
 ## Formulario de alta de trabajadores
 
-La sección "Sumate gratis" (`#trabajadores`) manda las respuestas al Google Form de siempre con `fetch()`,
+El formulario está en su propia página, `sumate.html`. A él llevan "Soy trabajador" (menú del header y hero)
+y el botón "Quiero sumarme" de la sección `#trabajadores` de la portada.
+Si cambiás el header o el footer, cambialos en las dos páginas (`index.html` y `sumate.html`).
+
+El formulario manda las respuestas al Google Form de siempre con `fetch()`,
 así caen en la hoja "Respuestas de alta" y la app de gestión crea al trabajador como Pendiente.
 Todo lo del Google Form está en `js/config.js`:
 
