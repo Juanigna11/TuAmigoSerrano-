@@ -1,0 +1,13 @@
+# Saltos de línea del proyecto
+# ----------------------------
+# Windows termina cada línea con dos caracteres (CRLF) y Linux/Mac con
+# uno (LF). Si se mezclan, git avisa en cada commit con
+# "LF will be replaced by CRLF". Con esta regla, todos los archivos de
+# texto usan LF, en cualquier computadora. Vercel y los navegadores
+# leen los dos formatos sin problema.
+* text=auto eol=lf
+
+# Imágenes: son binarias, git no tiene que tocarlas
+*.png  binary
+*.webp binary
+*.jpg  binary
