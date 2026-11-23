@@ -145,12 +145,13 @@
                   <p class="campo__error" id="error-experiencia" hidden></p>
                 </div>
 
-                <!-- fieldset + legend: agrupa varias casillas bajo una sola pregunta -->
-                <fieldset class="campo campo--ancho" id="grupo-otros" aria-describedby="ayuda-otros">
-                  <legend>Otros oficios</legend>
-                  <p class="campo__ayuda" id="ayuda-otros">Opcional. Tocá todos los que hagas además del principal.</p>
-                  <div class="chips-grupos" data-chips="otros"></div>
-                </fieldset>
+                <!-- Otros oficios: texto libre, a lo ancho. Es opcional. -->
+                <div class="campo campo--ancho">
+                  <label for="campo-otros">Otros</label>
+                  <input type="text" id="campo-otros" name="otros"
+                         aria-describedby="ayuda-otros">
+                  <p class="campo__ayuda" id="ayuda-otros">Opcional. Escribí otros oficios o arreglos que hacés, separados por coma. Ej.: herrería, arreglo de bicicletas</p>
+                </div>
 
                 <fieldset class="campo campo--ancho" id="grupo-localidades" aria-describedby="ayuda-localidades error-localidades">
                   <legend>Localidades donde trabajás</legend>

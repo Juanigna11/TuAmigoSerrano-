@@ -1,8 +1,8 @@
 /* =========================================================
    ALTA.JS · Formulario "Sumate gratis"
    ---------------------------------------------------------
-   1. Arma el desplegable y los chips con las listas de config.js
-   2. Muestra "Matrícula" solo si el oficio la pide
+   1. Arma el desplegable de oficios y los chips de localidades con las listas de config.js
+   2. Muestra "Matrícula" solo si el oficio principal la pide
    3. Valida todo en el navegador y marca cada error al lado del campo
    4. Envía las respuestas al Google Form con fetch()
    5. Muestra "¡Listo!" o, si falla, otras formas de mandar los datos
@@ -18,6 +18,7 @@
    - FormData: una "bolsa" de pares nombre/valor, como los campos de un
      formulario. Con append() se puede repetir el mismo nombre: así se
      mandan las casillas múltiples (una vez por cada localidad).
+     "Otros" es texto libre: va como una sola respuesta.
 
    - fetch(url, { method: "POST", body: datos }): manda la bolsa a Google.
 
@@ -39,7 +40,6 @@ const formAlta = document.getElementById("form-alta");
 if (formAlta) {
   const campos = formAlta.elements;                 // acceso a cada campo por su "name"
   const selectOficio = document.getElementById("campo-oficio");
-  const contOtros = formAlta.querySelector('[data-chips="otros"]');
   const contLocalidades = formAlta.querySelector('[data-chips="localidades"]');
   const bloqueMatricula = document.getElementById("bloque-matricula");
   const botonEnviar = formAlta.querySelector(".formulario__enviar");
@@ -80,20 +80,6 @@ if (formAlta) {
       optgroup.append(new Option(oficio, oficio));
     });
     selectOficio.append(optgroup);
-
-    // Chips de "Otros oficios", con el nombre de la categoría arriba
-    const bloque = document.createElement("div");
-    bloque.className = "chips-grupo";
-    const titulo = document.createElement("p");
-    titulo.className = "chips-grupo__titulo";
-    titulo.textContent = grupo.categoria;
-    const lista = document.createElement("div");
-    lista.className = "chips";
-    grupo.oficios.forEach(function (oficio) {
-      lista.append(crearChip("otros", oficio));
-    });
-    bloque.append(titulo, lista);
-    contOtros.append(bloque);
   });
 
   FORM_TRAMOS.forEach(function (grupo) {
@@ -148,22 +134,15 @@ if (formAlta) {
       .map(function (casilla) { return casilla.value; });
   }
 
+  // Solo miramos el oficio principal: "Otros" es texto libre y no se
+  // puede saber con seguridad qué escribió la persona.
   function pideMatricula() {
-    const oficios = [selectOficio.value].concat(elegidos("otros"));
-    return oficios.some(function (oficio) { return FORM_OFICIOS_CON_MATRICULA.includes(oficio); });
+    return FORM_OFICIOS_CON_MATRICULA.includes(selectOficio.value);
   }
 
-  function actualizarOficios() {
-    // El oficio principal no aparece en "Otros oficios" (sería repetirlo)
-    contOtros.querySelectorAll("input").forEach(function (casilla) {
-      const esElPrincipal = casilla.value === selectOficio.value;
-      if (esElPrincipal) casilla.checked = false;
-      casilla.closest(".chip-opcion").hidden = esElPrincipal;
-    });
+  selectOficio.addEventListener("change", function () {
     bloqueMatricula.hidden = !pideMatricula();
-  }
-  selectOficio.addEventListener("change", actualizarOficios);
-  contOtros.addEventListener("change", actualizarOficios);
+  });
 
 
   /* ---------- 3. Validación ---------- */
@@ -279,10 +258,10 @@ if (formAlta) {
     datos.append(FORM_CAMPOS.nombre, campos.nombre.value.trim());
     datos.append(FORM_CAMPOS.whatsapp, limpiarTelefono(campos.whatsapp.value));
     datos.append(FORM_CAMPOS.oficio, selectOficio.value);
+    // "Otros" es opcional: si está vacío no lo mandamos
+    const otros = campos.otros.value.trim();
+    if (otros) datos.append(FORM_CAMPOS.otrosOficios, otros);
     // Casillas múltiples: el MISMO código una vez por cada opción elegida
-    elegidos("otros").forEach(function (oficio) {
-      datos.append(FORM_CAMPOS.otrosOficios, oficio);
-    });
     elegidos("localidades").forEach(function (localidad) {
       datos.append(FORM_CAMPOS.localidades, localidad);
     });

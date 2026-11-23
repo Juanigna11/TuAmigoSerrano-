@@ -53,7 +53,8 @@ Todo lo del Google Form está en `js/config.js`:
 
 - `FORM_ACTION` (adónde se envía) y `FORM_PUBLICO` (el formulario común, de respaldo).
 - `FORM_CAMPOS`: el código `entry.` de cada pregunta.
-- `FORM_RUBROS`, `FORM_TRAMOS` y `FORM_OFICIOS_CON_MATRICULA`: las opciones de los chips y el desplegable.
+- `FORM_RUBROS` (desplegable "Oficio principal"), `FORM_TRAMOS` (chips de localidades) y `FORM_OFICIOS_CON_MATRICULA`.
+- "Otros" es texto libre: en el Google Form la pregunta "Otros oficios" tiene que ser de tipo **Respuesta corta**.
 
 **Si cambiás una pregunta u opción en el Google Form, cambiala también en `config.js`, letra por letra.**
 Si no coinciden, Google descarta la respuesta sin avisar (y la landing igual muestra "¡Listo!").
