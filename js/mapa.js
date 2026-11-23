@@ -189,7 +189,8 @@ if (!contenedorMapa || typeof L === "undefined") {
     pines[pueblo.nombre] = pin;
   });
 
-  function elegir(nombre) {
+  // animar = false: salta directo, sin el vuelo (lo usamos al cargar la página)
+  function elegir(nombre, animar) {
     chips.forEach(function (chip) {
       chip.setAttribute("aria-pressed", chip.dataset.pueblo === nombre ? "true" : "false");
     });
@@ -199,7 +200,7 @@ if (!contenedorMapa || typeof L === "undefined") {
       pines[pueblo.nombre].setZIndexOffset(esEste ? 1000 : 0);   // el elegido queda arriba
     });
     const centro = pines[nombre].getLatLng();
-    if (sinAnimacion) {
+    if (sinAnimacion || animar === false) {
       mapa.setView(centro, 14);
     } else {
       mapa.flyTo(centro, 14, { duration: 0.8 });
@@ -213,6 +214,12 @@ if (!contenedorMapa || typeof L === "undefined") {
     });
   });
 
-  // Encuadre inicial: que entren los 11 pueblos
-  mapa.fitBounds(PUEBLOS.map(function (p) { return [p.lat, p.lng]; }), { padding: [30, 30] });
+  // Vista inicial (23/11): en vez de mostrar los 11 pueblos de lejos,
+  // el mapa arranca ya parado en un pueblo, con su botón marcado y el
+  // globo "Pedir un trabajador en ..." abierto, como ejemplo de lo que
+  // pasa al tocar uno. Para cambiar el pueblo, cambiá este nombre
+  // (tiene que estar escrito igual que en la lista PUEBLOS).
+  const PUEBLO_INICIAL = "Salsipuedes";
+  elegir(PUEBLO_INICIAL, false);
+  pines[PUEBLO_INICIAL].openPopup();
 }
