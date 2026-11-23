@@ -73,7 +73,7 @@ const FORM_CAMPOS = {
   nombre:        "entry.454062258",
   whatsapp:      "entry.1690716608",
   oficio:        "entry.1174004062",
-  otrosOficios:  "entry.1802719753",   // se repite una vez por cada oficio elegido
+  otrosOficios:  "entry.1802719753",   // texto libre: en el Google Form tiene que ser "Respuesta corta"
   localidades:   "entry.164587036",    // se repite una vez por cada localidad
   experiencia:   "entry.551180325",
   disponibilidad:"entry.1866086879",
@@ -87,8 +87,8 @@ const FORM_CAMPOS = {
 const FORM_ACEPTO_REGLAS = "Acepto las reglas";
 
 /*
-  Rubros agrupados por categoría. Se usan dos veces:
-  en el desplegable "Oficio principal" y en los chips de "Otros oficios".
+  Rubros agrupados por categoría, para el desplegable "Oficio principal".
+  (Los otros oficios la persona los escribe a mano, en el campo "Otros".)
 */
 const FORM_RUBROS = [
   {
@@ -117,13 +117,9 @@ const FORM_RUBROS = [
     oficios: ["Limpieza de casas", "Fletes y mudanzas", "Armado de muebles",
       "Control de plagas"],
   },
-  {
-    categoria: "Otro",
-    oficios: ["Otro"],
-  },
 ];
 
-// Si alguno de estos está en el oficio principal u otros oficios, se pide matrícula
+// Si el oficio principal es uno de estos, se pide matrícula
 const FORM_OFICIOS_CON_MATRICULA = ["Electricidad", "Gas", "Termotanques y calefones",
   "Cocinas y hornos", "Calefactores y estufas", "Control de plagas"];
 
