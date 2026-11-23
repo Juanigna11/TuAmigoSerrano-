@@ -144,6 +144,8 @@
 
       <!-- Cinta de oficios: pasa despacio arriba de las sierras.
            Para sumar o sacar uno, copiar o borrar una línea <li>.
+           Solo rubros prioritarios del catálogo (⭐): no mostramos
+           servicios que todavía no podemos cubrir (23/11).
            data-pedido completa el mensaje de WhatsApp ("Necesito ...").
            main.js duplica la lista para que la cinta no tenga fin. -->
       <div class="cinta" aria-label="Otros oficios">
@@ -152,14 +154,13 @@
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20electricista" data-pedido="un electricista" target="_blank" rel="noopener">Electricistas</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20plomero" data-pedido="un plomero" target="_blank" rel="noopener">Plomeros</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20gasista" data-pedido="un gasista" target="_blank" rel="noopener">Gasistas</a></li>
-              <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20herrero" data-pedido="un herrero" target="_blank" rel="noopener">Herreros</a></li>
-              <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20carpintero" data-pedido="un carpintero" target="_blank" rel="noopener">Carpinteros</a></li>
-              <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20cerrajero" data-pedido="un cerrajero" target="_blank" rel="noopener">Cerrajeros</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20t%C3%A9cnico%20de%20lavarropas" data-pedido="un técnico de lavarropas" target="_blank" rel="noopener">Técnicos de lavarropas</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20t%C3%A9cnico%20de%20heladeras" data-pedido="un técnico de heladeras" target="_blank" rel="noopener">Técnicos de heladeras</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20t%C3%A9cnico%20de%20aire%20acondicionado" data-pedido="un técnico de aire acondicionado" target="_blank" rel="noopener">Aire acondicionado</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20t%C3%A9cnico%20de%20computadoras" data-pedido="un técnico de computadoras" target="_blank" rel="noopener">Computadoras</a></li>
+              <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20t%C3%A9cnico%20de%20televisores" data-pedido="un técnico de televisores" target="_blank" rel="noopener">Técnicos de televisores</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20alguien%20para%20podar%20%C3%A1rboles" data-pedido="alguien para podar árboles" target="_blank" rel="noopener">Poda de árboles</a></li>
+              <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20alguien%20para%20desmalezar%20un%20terreno" data-pedido="alguien para desmalezar un terreno" target="_blank" rel="noopener">Desmalezado de terrenos</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20un%20flete" data-pedido="un flete" target="_blank" rel="noopener">Fletes y mudanzas</a></li>
               <li><a class="cinta__oficio" href="https://wa.me/5493543691050?text=Hola%21%20Vengo%20de%20la%20web.%20Necesito%20alguien%20para%20limpiar%20la%20casa" data-pedido="alguien para limpiar la casa" target="_blank" rel="noopener">Limpieza de casas</a></li>
           </ul>
@@ -248,7 +249,7 @@
             </ul>
           </div>
         </div>
-        <p class="rubros__mas">¡Y mucho más! Herrería, carpintería, cerrajería, celulares, alarmas, portones…
+        <p class="rubros__mas">¡Y mucho más!
           <a class="etiqueta etiqueta--otro"
              data-wa="vecino"
              href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web.%20Necesito%20un%20trabajo%20o%20un%20arreglo"
