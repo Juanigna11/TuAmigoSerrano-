@@ -347,6 +347,16 @@
                 </ul>
               </li>
             </ul>
+            <!-- Ubicación: busca el pueblo más cercano a la persona.
+                 Queda oculto hasta que mapa.js confirma que el navegador
+                 puede dar la ubicación y que el mapa cargó. -->
+            <div class="ubicacion" hidden>
+              <button type="button" class="ubicacion__boton">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+                Buscar el pueblo más cercano a mí
+              </button>
+              <p class="ubicacion__estado" aria-live="polite"></p>
+            </div>
             <p class="zona__nota">¿Estás cerca y no ves tu localidad? Escribinos igual.</p>
           </div>
 

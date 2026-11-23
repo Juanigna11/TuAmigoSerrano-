@@ -823,6 +823,32 @@ a {
   margin-top: -0.75rem;
   color: var(--gris-piedra);
 }
+/* Botón "Buscar el pueblo más cercano a mí": contorno, para no competir
+   con los botones verdes de WhatsApp */
+.ubicacion { margin-top: 20px; }
+.ubicacion__boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 2px solid var(--azul-lago);
+  border-radius: var(--radio-pildora);
+  background: var(--blanco);
+  color: var(--azul-profundo);
+  font: 700 0.9375rem/1.2 var(--fuente-texto);
+  cursor: pointer;
+}
+.ubicacion__boton svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.ubicacion__boton:hover { background: var(--celeste-niebla); }
+.ubicacion__boton:disabled { cursor: progress; opacity: 0.7; }
+.ubicacion__estado {
+  margin: 8px 0 0;
+  font-size: var(--tam-chico);
+  color: var(--gris-piedra);
+}
+.ubicacion__estado:empty { display: none; }
+
 .zona__texto > .zona__nota {
   margin-top: 20px;
   font-size: var(--tam-chico);

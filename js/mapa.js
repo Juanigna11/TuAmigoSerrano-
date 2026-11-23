@@ -222,4 +222,95 @@ if (!contenedorMapa || typeof L === "undefined") {
   const PUEBLO_INICIAL = "Salsipuedes";
   elegir(PUEBLO_INICIAL, false);
   pines[PUEBLO_INICIAL].openPopup();
+
+  /*
+    Ubicación de la persona (23/11)
+    -------------------------------
+    navigator.geolocation es una API del navegador: le pide la ubicación
+    al dispositivo, PERO solo si la persona da permiso (aparece un cartel
+    del navegador). La ubicación queda en el navegador: no la mandamos a
+    ningún lado ni la guardamos.
+
+    Por qué un botón y no automático al abrir la página: los navegadores
+    desconfían de las páginas que piden la ubicación apenas cargan (Chrome
+    llega a silenciar el cartel) y mucha gente dice "no" por reflejo. Con
+    el botón, la persona entiende para qué se la pedimos.
+    Si ya nos dio permiso en otra visita, la usamos sola al cargar
+    (eso lo dice la Permissions API, sin mostrar ningún cartel).
+  */
+  const cajaUbicacion = document.querySelector(".ubicacion");
+  const botonUbicacion = document.querySelector(".ubicacion__boton");
+  const estadoUbicacion = document.querySelector(".ubicacion__estado");
+  let puntoPersona = null;   // el círculo azul que marca dónde está
+
+  // Distancia en km entre dos puntos del globo (fórmula del haversine)
+  function distanciaKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;   // radio de la Tierra en km
+    const rad = function (g) { return g * Math.PI / 180; };
+    const dLat = rad(lat2 - lat1);
+    const dLng = rad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+
+  function pueblosMasCercano(lat, lng) {
+    let mejor = null;
+    PUEBLOS.forEach(function (pueblo) {
+      const km = distanciaKm(lat, lng, pueblo.lat, pueblo.lng);
+      if (!mejor || km < mejor.km) mejor = { pueblo: pueblo, km: km };
+    });
+    return mejor;
+  }
+
+  function ubicar(silencioso) {
+    if (!silencioso) {
+      botonUbicacion.disabled = true;
+      estadoUbicacion.textContent = "Buscando dónde estás…";
+    }
+    navigator.geolocation.getCurrentPosition(function (posicion) {
+      const lat = posicion.coords.latitude;
+      const lng = posicion.coords.longitude;
+      const cercano = pueblosMasCercano(lat, lng);
+      const nombre = cercano.pueblo.nombre;
+      const km = Math.round(cercano.km);
+
+      // Marcamos a la persona con un punto azul lago
+      if (puntoPersona) puntoPersona.remove();
+      puntoPersona = L.circleMarker([lat, lng], {
+        radius: 9, color: "#FFFFFF", weight: 3, fillColor: "#3E6E96", fillOpacity: 1
+      }).addTo(mapa).bindTooltip("Estás acá", { direction: "top", offset: [0, -8] });
+
+      elegir(nombre, false);
+      // Si está cerca, encuadramos a la persona y al pueblo juntos
+      if (cercano.km < 15) {
+        mapa.fitBounds([[lat, lng], [cercano.pueblo.lat, cercano.pueblo.lng]],
+                       { padding: [70, 70], maxZoom: 14, animate: false });   // sin animar: así el globo se abre con el mapa ya quieto
+      }
+      pines[nombre].openPopup();
+
+      estadoUbicacion.textContent = cercano.km < 15
+        ? "Tu pueblo más cercano es " + nombre + "."
+        : "Estás a unos " + km + " km de la zona. El pueblo más cercano es " + nombre + ".";
+      botonUbicacion.disabled = false;
+    }, function () {
+      // Dijo que no, o el dispositivo no pudo ubicarse
+      if (!silencioso) {
+        estadoUbicacion.textContent = "No pudimos saber dónde estás. Elegí tu pueblo de la lista.";
+      }
+      botonUbicacion.disabled = false;
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
+  }
+
+  if (cajaUbicacion && "geolocation" in navigator) {
+    cajaUbicacion.hidden = false;
+    botonUbicacion.addEventListener("click", function () { ubicar(false); });
+
+    // ¿Ya nos dio permiso antes? Entonces la usamos sin preguntar de nuevo.
+    if (navigator.permissions) {
+      navigator.permissions.query({ name: "geolocation" }).then(function (permiso) {
+        if (permiso.state === "granted") ubicar(true);
+      }).catch(function () { /* navegador sin Permissions API: solo el botón */ });
+    }
+  }
 }
