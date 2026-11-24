@@ -1236,6 +1236,71 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
   content: "✓ ";
 }
 
+/* "¿Dónde atendés?": tarjetas para elegir una (radio por dentro).
+   Mismo lenguaje que los chips (blanco, borde gris niebla de 2 px),
+   pero más grandes y con radio-tarjeta porque llevan dos líneas.
+   Elegida: borde y tilde en verde serrano. */
+.opciones-tarjeta {
+  display: grid;
+  gap: 12px;
+}
+/* Dos clases (especificidad 0,2,0) para ganarle a ".campo label" (0,1,1),
+   que les saca el padding y cambia la letra a todas las etiquetas del formulario */
+.opciones-tarjeta .opcion-tarjeta {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  min-height: 44px;
+  padding: 16px 44px 16px 20px;          /* lugar a la derecha para la tilde */
+  border: 2px solid var(--gris-niebla);
+  border-radius: var(--radio-tarjeta);
+  background: var(--blanco);
+  cursor: pointer;
+  transition: border-color 0.15s;        /* la misma transición que los chips */
+}
+.opcion-tarjeta:hover {
+  border-color: var(--verde-serrano);
+}
+/* El radio queda escondido a la vista, pero funciona con teclado y lector */
+.opcion-tarjeta input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+.opcion-tarjeta__titulo {
+  color: var(--azul-profundo);
+  font-weight: 700;
+}
+.opcion-tarjeta__texto {
+  color: var(--gris-piedra);
+  font-size: var(--tam-chico);
+  line-height: 1.5;
+}
+/* :has() pregunta "¿esta tarjeta tiene adentro un radio marcado?".
+   Así el borde verde se pone en toda la tarjeta, no solo en el radio. */
+.opcion-tarjeta:has(input:checked) {
+  border-color: var(--verde-serrano);
+}
+.opcion-tarjeta:has(input:checked)::after {
+  content: "✓";
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  color: var(--verde-serrano);
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+.opcion-tarjeta:has(input:focus-visible) {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+/* Si falta elegir, el error marca el borde de las tres tarjetas */
+#grupo-atiende:has(#error-atiende:not([hidden])) .opcion-tarjeta {
+  border-color: var(--rojo-error);
+}
+
 /* Referencias: nombre | teléfono */
 .referencia__fila {
   display: grid;
@@ -1373,6 +1438,9 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
   }
   .campo--ancho {
     grid-column: 1 / -1;
+  }
+  .opciones-tarjeta {                    /* las tres tarjetas en una fila */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

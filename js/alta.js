@@ -2,7 +2,8 @@
    ALTA.JS · Formulario "Sumate gratis"
    ---------------------------------------------------------
    1. Arma el desplegable de oficios y los chips de localidades con las listas de config.js
-   2. Muestra "Matrícula" solo si el oficio principal la pide
+   2. Muestra "Matrícula" solo si el oficio principal la pide, y arma
+      "¿Dónde atendés?" (tres tarjetas para elegir una)
    3. Valida todo en el navegador y marca cada error al lado del campo
    4. Envía las respuestas al Google Form con fetch()
    5. Muestra "¡Listo!" o, si falla, otras formas de mandar los datos
@@ -41,6 +42,8 @@ if (formAlta) {
   const campos = formAlta.elements;                 // acceso a cada campo por su "name"
   const selectOficio = document.getElementById("campo-oficio");
   const contLocalidades = formAlta.querySelector('[data-chips="localidades"]');
+  const ayudaLocalidades = document.getElementById("ayuda-localidades");
+  const contAtiende = formAlta.querySelector('[data-opciones="atiende"]');
   const bloqueMatricula = document.getElementById("bloque-matricula");
   const botonEnviar = formAlta.querySelector(".formulario__enviar");
   const avisoFallo = document.getElementById("alta-fallo");
@@ -145,6 +148,40 @@ if (formAlta) {
   });
 
 
+  /* ---------- 2b. ¿Dónde atendés? ----------
+     Cada tarjeta es un <label> con un radio adentro. Como los tres radios
+     tienen el mismo name ("atiende"), solo uno puede estar marcado. El radio
+     está escondido a la vista pero sigue funcionando con el teclado
+     (Tab para llegar, flechas para cambiar) y con el lector de pantalla. */
+  FORM_DONDE_ATIENDE.forEach(function (opcion) {
+    const label = document.createElement("label");
+    label.className = "opcion-tarjeta";
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "atiende";
+    radio.value = opcion.valor;
+    const titulo = document.createElement("span");
+    titulo.className = "opcion-tarjeta__titulo";
+    titulo.textContent = opcion.titulo;
+    const texto = document.createElement("span");
+    texto.className = "opcion-tarjeta__texto";
+    texto.textContent = opcion.texto;
+    label.append(radio, titulo, texto);
+    contAtiende.append(label);
+  });
+
+  // La opción marcada (o undefined si todavía no eligió ninguna)
+  function atiendeElegida() {
+    const marcado = formAlta.querySelector('input[name="atiende"]:checked');
+    return FORM_DONDE_ATIENDE.find(function (o) { return marcado && o.valor === marcado.value; });
+  }
+
+  // Si atiende en su taller, la ayuda de Localidades explica qué marcar
+  contAtiende.addEventListener("change", function () {
+    ayudaLocalidades.textContent = atiendeElegida().ayudaLocalidades;
+  });
+
+
   /* ---------- 3. Validación ---------- */
 
   /**
@@ -194,6 +231,11 @@ if (formAlta) {
       return contLocalidades.querySelector("input");
     }, revisar: function () {
       return elegidos("localidades").length ? "" : "Elegí al menos una localidad.";
+    } },
+    { error: "error-atiende", campo: null, foco: function () {
+      return contAtiende.querySelector("input");
+    }, revisar: function () {
+      return atiendeElegida() ? "" : "Elegí dónde atendés";
     } },
     { error: "error-disponibilidad", campo: campos.disponibilidad, revisar: function () {
       return campos.disponibilidad.value.trim() ? "" : "Contanos qué días y horarios podés trabajar.";
@@ -265,6 +307,14 @@ if (formAlta) {
     elegidos("localidades").forEach(function (localidad) {
       datos.append(FORM_CAMPOS.localidades, localidad);
     });
+    // Mientras el código del Google Form no esté cargado en config.js,
+    // no mandamos esta respuesta: un código inventado podría hacer que
+    // Google descarte el alta entera.
+    if (!FORM_CAMPOS.dondeAtiende.includes("COMPLETAR")) {
+      datos.append(FORM_CAMPOS.dondeAtiende, atiendeElegida().valor);
+    } else {
+      console.warn('Falta el código de "¿Dónde atendés?" en config.js: no se envía.');
+    }
     datos.append(FORM_CAMPOS.experiencia, String(Number(campos.experiencia.value)));
     datos.append(FORM_CAMPOS.disponibilidad, campos.disponibilidad.value.trim());
     if (pideMatricula()) {

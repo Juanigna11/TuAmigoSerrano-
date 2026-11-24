@@ -75,6 +75,10 @@ const FORM_CAMPOS = {
   oficio:        "entry.1174004062",
   otrosOficios:  "entry.1802719753",   // texto libre: en el Google Form tiene que ser "Respuesta corta"
   localidades:   "entry.164587036",    // se repite una vez por cada localidad
+  // "¿Dónde atendés?" (opción múltiple). TODO: poner el código real cuando
+  // la pregunta exista en el Google Form. Mientras diga COMPLETAR, alta.js
+  // NO la manda (para no arriesgar el alta entera).
+  dondeAtiende:  "entry.COMPLETAR",
   experiencia:   "entry.551180325",
   disponibilidad:"entry.1866086879",
   matricula:     "entry.1475792471",
@@ -109,8 +113,11 @@ const FORM_RUBROS = [
       "Computadoras y notebooks", "Televisores", "Celulares",
       "Pequeños electrodomésticos", "Cocinas y hornos",
       "Calefactores y estufas", "Internet y wifi", "Cámaras y alarmas",
-      "Portones automáticos", "Bicicletas",
       "Motosierras, motoguadañas y cortadoras de pasto"],   // ← es UNA sola opción
+  },
+  {
+    categoria: "Vehículos",
+    oficios: ["Mecánica de autos", "Mecánica de motos", "Bicicletería"],
   },
   {
     categoria: "Hogar y servicios generales",
@@ -127,6 +134,21 @@ const FORM_RUBROS = [
 // Si el oficio principal es uno de estos, se pide matrícula
 const FORM_OFICIOS_CON_MATRICULA = ["Electricidad", "Gas", "Termotanques y calefones",
   "Cocinas y hornos", "Calefactores y estufas", "Control de plagas"];
+
+/*
+  "¿Dónde atendés?": tres tarjetas, se elige una.
+  - valor: lo que se manda a Google (tiene que ser IGUAL a la opción del Google Form)
+  - titulo y texto: lo que ve la persona
+  - ayudaLocalidades: cómo cambia la ayuda de "Localidades" según lo elegido
+*/
+const FORM_DONDE_ATIENDE = [
+  { valor: "A domicilio",       titulo: "A domicilio",          texto: "Voy a la casa del vecino.",
+    ayudaLocalidades: "Marcá dónde trabajás." },
+  { valor: "En taller o local", titulo: "En mi taller o local", texto: "El vecino me trae el trabajo o el aparato.",
+    ayudaLocalidades: "Marcá la localidad de tu taller y las zonas de donde te pueden traer trabajos." },
+  { valor: "Las dos",           titulo: "Las dos",              texto: "Según el trabajo.",
+    ayudaLocalidades: "Marcá dónde trabajás." },
+];
 
 // Localidades por tramo, de norte a sur: el mismo orden que en "Dónde estamos"
 // (como se ven en el mapa, con el norte arriba)

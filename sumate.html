@@ -174,9 +174,20 @@
 
                 <fieldset class="campo campo--ancho" id="grupo-localidades" aria-describedby="ayuda-localidades error-localidades">
                   <legend>Localidades donde trabajás</legend>
-                  <p class="campo__ayuda" id="ayuda-localidades">Elegí al menos una.</p>
+                  <!-- Esta ayuda cambia según lo que elijas en "¿Dónde atendés?" (ver alta.js) -->
+                  <p class="campo__ayuda" id="ayuda-localidades">Marcá dónde trabajás.</p>
                   <div class="chips-grupos" data-chips="localidades"></div>
                   <p class="campo__error" id="error-localidades" hidden></p>
+                </fieldset>
+
+                <!-- ¿Dónde atendés? Se elige una de tres tarjetas.
+                     Por dentro son <input type="radio"> con el mismo name: el navegador
+                     ya sabe que solo puede haber una marcada, y con el teclado se pasa
+                     de una a otra con las flechas. alta.js las arma desde config.js. -->
+                <fieldset class="campo campo--ancho" id="grupo-atiende" aria-describedby="error-atiende">
+                  <legend>¿Dónde atendés?</legend>
+                  <div class="opciones-tarjeta" data-opciones="atiende"></div>
+                  <p class="campo__error" id="error-atiende" hidden></p>
                 </fieldset>
 
                 <div class="campo campo--ancho">
