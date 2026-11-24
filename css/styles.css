@@ -1566,6 +1566,91 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
   }
 }
 
+/* Celulares muy angostos (hasta 374 px): el nombre y "Escribinos" un poco
+   más chicos para que entren junto con la hamburguesa */
+@media (max-width: 374px) {
+  .marca { font-size: 1rem; gap: 8px; }
+  .cabecera .boton--chico { padding-inline: 12px; }
+}
+
+/* ---------- Menú hamburguesa (celular y tablet, hasta 900 px) ----------
+   Tres rayitas que se convierten en una X al abrir. El panel baja
+   debajo del header (que es sticky, así que acompaña al scroll). */
+.hamburguesa {
+  display: inline-grid;
+  place-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  margin-left: -8px;                 /* el gap del header ya separa; lo acercamos al botón */
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+.hamburguesa__linea {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: var(--blanco);
+  transition: transform 0.2s, opacity 0.2s;
+}
+/* Abierto: la de arriba y la de abajo giran y forman la X */
+.hamburguesa[aria-expanded="true"] .hamburguesa__linea:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.hamburguesa[aria-expanded="true"] .hamburguesa__linea:nth-child(2) { opacity: 0; }
+.hamburguesa[aria-expanded="true"] .hamburguesa__linea:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+.menu-movil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: var(--azul-noche);
+  border-bottom: 1px solid rgba(207, 224, 236, 0.12);
+  box-shadow: 0 16px 32px rgba(10, 20, 35, 0.35);
+}
+.menu-movil ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 auto;
+  padding-block: 8px 20px;
+  list-style: none;
+}
+.menu-movil a {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  color: var(--blanco);
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(207, 224, 236, 0.12);
+}
+/* "Soy trabajador" destacado: botón verde serrano con borde verde loma,
+   como los botones del sitio, con una bajada que dice para qué es */
+.menu-movil a.menu-movil__destacado {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 12px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: var(--radio-tarjeta);
+  background: var(--verde-serrano);
+  box-shadow: inset 0 0 0 2px var(--verde-loma);
+}
+.menu-movil__bajada {
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--celeste-niebla);
+}
+
 /* Desde 900px: menú e ícono de Facebook en el header.
    (Entre 768 y 900 no entran al lado del nombre y el botón.) */
 @media (min-width: 900px) {
@@ -1573,6 +1658,10 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
     display: block;
     margin-left: auto;               /* empuja el menú hacia la derecha */
   }
+
+  /* En compu el menú va en el header: sin hamburguesa */
+  .hamburguesa,
+  .menu-movil { display: none; }
 
   .cabecera__facebook {
     display: inline-grid;

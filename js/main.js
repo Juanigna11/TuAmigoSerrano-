@@ -275,3 +275,37 @@ if (pasosLista && numerosPasos.length && !pideMenosMovimiento) {
   window.addEventListener("resize", pedirCuadro);
   moverPelotita();
 }
+
+
+/*
+  Menú hamburguesa (celular)
+  --------------------------
+  - El botón cambia aria-expanded (true/false) y muestra u oculta el panel
+    con el atributo hidden. El CSS dibuja la X según aria-expanded.
+  - Se cierra al tocar una opción, al tocar fuera del menú o con Escape.
+*/
+const botonMenu = document.querySelector(".hamburguesa");
+const panelMenu = document.getElementById("menu-movil");
+
+if (botonMenu && panelMenu) {
+  function abrirMenu(abrir) {
+    botonMenu.setAttribute("aria-expanded", abrir ? "true" : "false");
+    botonMenu.setAttribute("aria-label", abrir ? "Cerrar el menú" : "Abrir el menú");
+    panelMenu.hidden = !abrir;
+  }
+  botonMenu.addEventListener("click", function () {
+    abrirMenu(botonMenu.getAttribute("aria-expanded") !== "true");
+  });
+  panelMenu.addEventListener("click", function (evento) {
+    if (evento.target.closest("a")) abrirMenu(false);
+  });
+  document.addEventListener("pointerdown", function (evento) {
+    if (!panelMenu.hidden && !evento.target.closest(".cabecera")) abrirMenu(false);
+  });
+  document.addEventListener("keydown", function (evento) {
+    if (evento.key === "Escape" && !panelMenu.hidden) {
+      abrirMenu(false);
+      botonMenu.focus();   // el foco vuelve al botón, para quien usa teclado
+    }
+  });
+}

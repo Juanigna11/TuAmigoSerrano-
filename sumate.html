@@ -81,7 +81,26 @@
          data-wa="general"
          href="https://wa.me/5493543691050?text=Hola!%20Vengo%20de%20la%20web"
          target="_blank" rel="noopener">Escribinos</a>
+      <!-- Menú hamburguesa (solo celular, hasta 900 px). main.js lo abre y cierra:
+           aria-expanded le dice al lector de pantalla si está abierto. -->
+      <button type="button" class="hamburguesa" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir el menú">
+        <span class="hamburguesa__linea"></span>
+        <span class="hamburguesa__linea"></span>
+        <span class="hamburguesa__linea"></span>
+      </button>
     </div>
+
+    <nav class="menu-movil" id="menu-movil" aria-label="Secciones de la página" hidden>
+      <ul class="contenedor">
+        <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+        <li><a href="index.html#zona">Dónde estamos</a></li>
+        <!-- Destacado: es la puerta para los que ofrecen un servicio -->
+        <li><a class="menu-movil__destacado" href="sumate.html" aria-current="page">
+          <span>Soy trabajador</span>
+          <span class="menu-movil__bajada">Ofrecé tu servicio · Sumate gratis</span>
+        </a></li>
+      </ul>
+    </nav>
   </header>
 
   <main id="contenido">
