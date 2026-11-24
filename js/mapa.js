@@ -229,6 +229,10 @@ if (!contenedorMapa || typeof L === "undefined") {
     });
   });
 
+  // La mención a Leaflet abre en otra pestaña (como todos los links externos),
+  // así el visitante no se va de la página
+  mapa.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+
   // ----- Despertar / dormir el mapa -----
   const marcoMapa = contenedorMapa.parentElement;
   const aviso = document.createElement("p");

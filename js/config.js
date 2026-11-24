@@ -117,15 +117,21 @@ const FORM_RUBROS = [
     oficios: ["Limpieza de casas", "Fletes y mudanzas", "Armado de muebles",
       "Control de plagas"],
   },
+  {
+    // Para quien no encuentra su oficio en la lista: lo aclara en "Otros"
+    categoria: "Otro",
+    oficios: ["Otro"],
+  },
 ];
 
 // Si el oficio principal es uno de estos, se pide matrícula
 const FORM_OFICIOS_CON_MATRICULA = ["Electricidad", "Gas", "Termotanques y calefones",
   "Cocinas y hornos", "Calefactores y estufas", "Control de plagas"];
 
-// Localidades por tramo (de sur a norte)
+// Localidades por tramo, de norte a sur: el mismo orden que en "Dónde estamos"
+// (como se ven en el mapa, con el norte arriba)
 const FORM_TRAMOS = [
-  { tramo: "Sur",    clase: "tramo--sur",    localidades: ["La Calera", "Saldán", "Villa Allende", "Mendiolaza"] },
-  { tramo: "Centro", clase: "tramo--centro", localidades: ["Unquillo", "Río Ceballos"] },
-  { tramo: "Norte",  clase: "tramo--norte",  localidades: ["Salsipuedes", "El Manzano", "Agua de Oro", "La Granja", "Ascochinga"] },
+  { tramo: "Norte",  clase: "tramo--norte",  localidades: ["Ascochinga", "La Granja", "Agua de Oro", "El Manzano", "Salsipuedes"] },
+  { tramo: "Centro", clase: "tramo--centro", localidades: ["Río Ceballos", "Unquillo"] },
+  { tramo: "Sur",    clase: "tramo--sur",    localidades: ["Mendiolaza", "Villa Allende", "Saldán", "La Calera"] },
 ];
