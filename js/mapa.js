@@ -46,8 +46,23 @@ if (!contenedorMapa || typeof L === "undefined") {
     });
   });
 } else {
+  /*
+    El mapa arranca "dormido" para no atrapar el scroll de la página:
+    - Sin arrastre ni zoom con dos dedos: si pasás el dedo (o la rueda)
+      por encima, la página sigue bajando.
+    - Se despierta con doble toque (o doble clic): ahí sí se puede mover
+      y hacer zoom.
+    - Se vuelve a dormir cuando sale de la pantalla o cuando tocás fuera.
+    Los pines, los botones + / − y la capa Satélite funcionan siempre.
+    Truco: Leaflet le pone "touch-action: none" al mapa solo mientras el
+    arrastre está activo; con el arrastre apagado, el navegador deja
+    scrollear la página por encima del mapa.
+  */
   const mapa = L.map(contenedorMapa, {
     scrollWheelZoom: false,          // la rueda del mouse sigue bajando la página
+    dragging: false,
+    touchZoom: false,
+    doubleClickZoom: false,          // el doble toque lo usamos para despertarlo
     zoomControl: true,
   });
 
@@ -213,6 +228,41 @@ if (!contenedorMapa || typeof L === "undefined") {
       pines[chip.dataset.pueblo].openPopup();
     });
   });
+
+  // ----- Despertar / dormir el mapa -----
+  const marcoMapa = contenedorMapa.parentElement;
+  const aviso = document.createElement("p");
+  aviso.className = "zona__aviso";
+  aviso.setAttribute("aria-hidden", "true");   // es una ayuda visual; con teclado el mapa se maneja con + / −
+  marcoMapa.appendChild(aviso);
+  let despierto = false;
+
+  function dormir() {
+    despierto = false;
+    mapa.dragging.disable();
+    mapa.touchZoom.disable();
+    mapa.scrollWheelZoom.disable();
+    marcoMapa.classList.remove("zona__marco--activo");
+    aviso.textContent = "Tocá dos veces el mapa para moverlo";
+  }
+  function despertar() {
+    despierto = true;
+    mapa.dragging.enable();
+    mapa.touchZoom.enable();
+    mapa.scrollWheelZoom.enable();
+    marcoMapa.classList.add("zona__marco--activo");
+    aviso.textContent = "Mapa activo · tocá afuera para seguir bajando";
+  }
+  dormir();
+  mapa.on("dblclick", function () { if (!despierto) despertar(); });
+  // Tocar o hacer clic fuera del mapa lo duerme
+  document.addEventListener("pointerdown", function (evento) {
+    if (despierto && !marcoMapa.contains(evento.target)) dormir();
+  });
+  // Si el mapa sale de la pantalla, también se duerme
+  new IntersectionObserver(function (entradas) {
+    if (!entradas[0].isIntersecting && despierto) dormir();
+  }).observe(contenedorMapa);
 
   // Vista inicial (23/11): en vez de mostrar los 11 pueblos de lejos,
   // el mapa arranca ya parado en un pueblo, con su botón marcado y el

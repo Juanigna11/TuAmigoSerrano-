@@ -213,8 +213,7 @@ if (heroSierras && lomaAtras && lomaAdelante && !pideMenosMovimiento) {
   2. Con ese número ubicamos la pelotita entre el centro del número 1
      y el del 3 (pasando por el 2), saltando en arco de uno al otro.
   3. Cada número que la pelotita ya alcanzó se pinta de verde.
-  En celular la pelotita no se muestra (el CSS la oculta), pero los
-  números se pintan igual a medida que bajás.
+  En celular baja por la columna de los números, con un arco más chico.
 */
 const pasosLista = document.querySelector(".pasos");
 const numerosPasos = pasosLista ? pasosLista.querySelectorAll(".paso__numero") : [];
@@ -248,12 +247,17 @@ if (pasosLista && numerosPasos.length && !pideMenosMovimiento) {
     const posicion = avance * tramos;                 // de 0 a 2
     const i = Math.min(Math.floor(posicion), tramos - 1);
     const t = posicion - i;
-    const x = centros[i].x + (centros[i + 1].x - centros[i].x) * t;
     // Salto: Math.sin(Math.PI * t) vale 0 al salir, 1 en la mitad y 0 al
     // llegar. Multiplicado por la altura del salto, dibuja un arco.
-    const ALTURA_SALTO = 46;
-    const y = centros[i].y + (centros[i + 1].y - centros[i].y) * t
-              - ALTURA_SALTO * Math.sin(Math.PI * t);
+    // - En compu los pasos están en fila: el arco va hacia ARRIBA.
+    // - En celular están en columna: el arco va hacia la IZQUIERDA y es
+    //   más chico, para no salirse de la tarjeta ni pisar el texto.
+    const dx = centros[i + 1].x - centros[i].x;
+    const dy = centros[i + 1].y - centros[i].y;
+    const enFila = Math.abs(dx) > Math.abs(dy);
+    const salto = Math.sin(Math.PI * t) * (enFila ? 46 : 20);
+    const x = centros[i].x + dx * t - (enFila ? 0 : salto);
+    const y = centros[i].y + dy * t - (enFila ? salto : 0);
     pelotita.style.translate = (x - 8) + "px " + (y - 8) + "px";   // 8 = mitad de la pelotita
 
     numerosPasos.forEach(function (numero, n) {

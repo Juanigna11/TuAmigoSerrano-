@@ -329,7 +329,7 @@ a {
   /* espacio extra abajo para la silueta de las sierras */
   padding-bottom: clamp(170px, 19vw, 250px);   /* lugar para la cinta de oficios y las sierras */
   --foco: var(--amarillo-sol);
-  overflow-x: clip;                  /* las lomas son más anchas que la pantalla para poder moverse */
+  overflow: clip;                    /* las lomas son más anchas que la pantalla y el sol baja al scrollear: nada se asoma afuera del hero */
 }
 
 .hero__grilla {
@@ -627,7 +627,33 @@ a {
    main.js la mueve según cuánto scrolleaste dentro de la sección y
    le pone "paso__numero--alcanzado" a cada número que ya pasó. */
 .pasos { position: relative; z-index: 0; }
-.pasos__pelotita { display: none; }
+/* Pelotita (el sol) que recorre los pasos. En celular baja por la
+   columna de los números; en compu va de costado (ver main.js). */
+.pasos__pelotita {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--amarillo-sol);
+  pointer-events: none;
+  will-change: translate;            /* le avisa al navegador que se va a mover */
+}
+/* En celular, el número va a la izquierda y el texto a la derecha:
+   así la columna de los números queda libre para que pase el sol
+   sin tapar el texto. */
+@media (max-width: 959px) {
+  .paso {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 16px;
+    align-items: start;
+  }
+  .paso__numero { grid-row: span 2; margin-bottom: 0; }
+  .paso h3, .paso p { grid-column: 2; }
+}
 .paso__numero {
   position: relative;
   z-index: 2;                        /* por encima de la pelotita */
@@ -922,6 +948,25 @@ a {
   min-height: 380px;
   background: var(--gris-niebla);        /* se ve mientras cargan las imágenes */
 }
+/* Aviso "Tocá dos veces el mapa para moverlo", abajo al centro */
+.zona__aviso {
+  position: absolute;
+  z-index: 1000;                     /* por encima de las capas de Leaflet (dentro del marco aislado) */
+  left: 50%;
+  bottom: 28px;
+  translate: -50% 0;
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: var(--radio-pildora);
+  background: rgba(20, 42, 64, 0.85);
+  color: var(--blanco);
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;              /* no tapa los toques al mapa */
+}
+.zona__marco--activo { outline: 3px solid var(--verde-loma); outline-offset: 3px; }
+
 .zona__capas {                            /* botones Mapa / Satélite, arriba a la derecha (el zoom de Leaflet va a la izquierda) */
   position: absolute;
   top: 12px;
@@ -1503,19 +1548,6 @@ fieldset.campo {                         /* el fieldset trae borde y márgenes d
 
   .pasos {
     grid-template-columns: repeat(3, 1fr);
-  }
-  .pasos__pelotita {
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--amarillo-sol);
-    pointer-events: none;
-    will-change: translate;          /* le avisa al navegador que se va a mover */
   }
 
 
